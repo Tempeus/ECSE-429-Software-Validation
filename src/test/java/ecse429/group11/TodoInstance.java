@@ -1,8 +1,17 @@
 package ecse429.group11;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class TodoInstance {
+
+    private static final String baseURL = "http://localhost:4567";
 
     public static void runApplication(){
         try {
@@ -14,9 +23,36 @@ public class TodoInstance {
 
     public static void killInstance(){
         try {
-            TestTodos.send("GET","/shutdown");
+            send("GET","/shutdown");
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static JSONObject send(String type, String option) throws IOException {
+        URL url = new URL(baseURL + option);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod(type);
+        connection.setRequestProperty("Accept", "application/json");
+        System.out.println(connection.getContentType());
+        if (connection.getResponseCode() != 200) {
+            throw new RuntimeException(url.toString() + " Returned error: " + connection.getResponseCode());
+        }
+        BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream())));
+        String response = br.readLine();
+        if (response == null) {
+            return null;
+        }
+
+        JSONObject json = new JSONObject(response);
+        connection.disconnect();
+        return json;
+    }
+
+    public static int getStatusCode(String option) throws IOException {
+        URL url = new URL(baseURL + option);
+        HttpURLConnection http;
+        http = (HttpURLConnection)url.openConnection();
+        return http.getResponseCode();
     }
 }

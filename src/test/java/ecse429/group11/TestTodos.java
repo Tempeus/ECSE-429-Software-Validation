@@ -1,22 +1,15 @@
 package ecse429.group11;
 
-import static org.junit.Assert.assertTrue;
+import static ecse429.group11.TodoInstance.send;
 import static org.junit.Assert.assertEquals;
 
 
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class TestTodos {
 
@@ -25,7 +18,7 @@ public class TestTodos {
     private static final int CREATED = 201;
     private static final int NOT_FOUND = 404;
     private static final int BAD_REQUEST = 400;
-    private static final String baseURL = "http://localhost:4567";
+
 
 //    @Before
 //    public void startInstance(){
@@ -37,29 +30,37 @@ public class TestTodos {
     //GET todos
     @Test
     public void testGetStatusCode() throws IOException {
-        URL url = new URL("http://localhost:4567/todos");
-        HttpURLConnection http;
-        http = (HttpURLConnection)url.openConnection();
-        int statusCode = -1;
-        statusCode = http.getResponseCode();
-        System.out.println(statusCode);
-        assertEquals(statusCode, SUCCESS);
+        assertEquals(TodoInstance.getStatusCode("/todos"), SUCCESS);
     }
 
     @Test
     public void testGetAllTodos() throws IOException {
         JSONObject response = send("GET", "/todos");
         assertEquals(2,response.getJSONArray("todos").length());
-        System.out.println(response.getJSONArray("todos").length());
     }
 
     @Test
     public void testGetSpecificTodoUsingID() throws IOException{
         JSONObject response = send("GET", "/todos/1");
-
-        String result = response.todos[0];
-        System.out.println(result);
+        String expected = "1";
+        String result = response.getJSONArray("todos").getJSONObject(0).getString("id");
+        assertEquals(result, expected);
     }
+
+    @Test
+    public void testGetInvalidID() throws IOException {
+        String invalid_request = "/todos/3";
+        assertEquals(TodoInstance.getStatusCode(invalid_request), NOT_FOUND);
+    }
+
+    @Test
+    public void testGetValidID() throws IOException {
+        String valid_request = "/todos/2";
+        assertEquals(TodoInstance.getStatusCode(valid_request),SUCCESS);
+    }
+
+
+
 
 
     //POST todos
@@ -75,25 +76,5 @@ public class TestTodos {
 //    public void deadifyInstance(){
 //        TodoInstance.killInstance();
 //    }
-
-    public static JSONObject send(String type, String option) throws IOException {
-        URL url = new URL(baseURL + option);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod(type);
-        connection.setRequestProperty("Accept", "application/json");
-        System.out.println(connection.getContentType());
-        if (connection.getResponseCode() != 200) {
-            throw new RuntimeException(url.toString() + " Returned error: " + connection.getResponseCode());
-        }
-        BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream())));
-        String response = br.readLine();
-        if (response == null) {
-            return null;
-        }
-
-        JSONObject json = new JSONObject(response);
-        connection.disconnect();
-        return json;
-    }
 
 }
