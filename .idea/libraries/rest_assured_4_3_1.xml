@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="rest-assured-4.3.1">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/rest-assured-4.3.1.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
