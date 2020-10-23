@@ -11,6 +11,12 @@ import java.net.URL;
 
 public class TodoInstance {
 
+    //List of status codes that will be referred during the UNIT TESTING
+    public static final int SC_SUCCESS = 200;
+    public static final int SC_CREATED = 201;
+    public static final int SC_NOT_FOUND = 404;
+    public static final int SC_BAD_REQUEST = 400;
+
     private static final String baseURL = "http://localhost:4567";
 
     public static void runApplication(){
