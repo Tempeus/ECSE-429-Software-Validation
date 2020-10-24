@@ -43,8 +43,30 @@ public class TestProjects {
     public void testGetInvalidProjectTitle() throws IOException {
 
     }
+
+    //GET projects/id
+
     //POST Projects
 
+    @Test
+    public void testCreateProject(){
+
+    }
+
+    @Test
+    public void testCreateProjectWithTitle(){
+
+    }
+
+    @Test
+    public void testCreateProjectWithNoTitle(){
+
+    }
+
+    @Test
+    public void testCreateProjectWithNoInfo(){
+
+    }
     //HEAD Projects
 
 }
