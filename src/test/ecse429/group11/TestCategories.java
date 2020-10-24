@@ -40,12 +40,37 @@ public class TestCategories {
     //GET categories/id
 
     @Test
-    public void testGetCategoriesWithValidID(){
+    public void testGetSpecificCategoryUsingID() throws IOException {
+        JSONObject response = TodoInstance.send("GET", "/categories/1");
+        String expected = "1";
+        String result = response.getJSONArray("categories").getJSONObject(0).getString("id");
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testGetCategoriesWithValidID() throws IOException {
+        String valid_request = "/categories/1";
+        assertEquals(TodoInstance.getStatusCode(valid_request), TodoInstance.SC_SUCCESS);
+    }
+
+    @Test
+    public void testGetCategoriesWithInvalidID() throws IOException {
+        String invalid_request = "/categories/3";
+        assertEquals(TodoInstance.getStatusCode(invalid_request), TodoInstance.SC_NOT_FOUND);
+    }
+
+    @Test
+    public void testGetProjectsOfCategories(){
 
     }
 
     @Test
-    public void testGetCategoriesWithInvalidID(){
+    public void testGetInvalidProjectOfCategories(){
+
+    }
+
+    @Test
+    public void testGetTodoOfCategories(){
 
     }
 
@@ -68,6 +93,75 @@ public class TestCategories {
     }
 
     //DELETE categories
+    @Test
+    public void testDeleteAllCategories() throws IOException {
+        String option = "/categories";
+        assertEquals(TodoInstance.SC_UNSUPPORTED,TodoInstance.getStatusCode("DELETE", option));
+    }
 
     //DELETE categories/id
+    @Test
+    public void testDeleteValidCategories() throws IOException {
+        String valid_id = "/categories/1";
+        assertEquals(TodoInstance.getStatusCode(valid_id), TodoInstance.SC_SUCCESS);
+        TodoInstance.send("DELETE",valid_id);
+        assertEquals(TodoInstance.getStatusCode(valid_id), TodoInstance.SC_NOT_FOUND);
+    }
+
+    @Test
+    public void testDeleteInvalidCategories() throws IOException {
+        String invalid_id = "/categories/3";
+
+        JSONObject result = TodoInstance.send("DELETE",invalid_id);
+        assertEquals(null, result);
+    }
+
+    @Test
+    public void testDeleteProjectsOfCategories(){
+
+    }
+
+    @Test
+    public void testDeleteInvalidProjectsOfCategories(){
+
+    }
+
+    @Test
+    public void testDeleteTodosOfCategories(){
+
+    }
+
+    @Test
+    public void testDeleteInvalidTodosOfCategories(){
+
+    }
+
+    //HEAD categories
+    @Test
+    public void testHeadCategories() throws IOException {
+        String option = "/categories";
+        String head = TodoInstance.getHeadContentType(option);
+        assertEquals("application/json", head);
+    }
+
+    @Test
+    public void testHeadCategoriesID() throws IOException {
+        String option = "/categories/1";
+        String head = TodoInstance.getHeadContentType(option);
+        assertEquals("application/json", head);
+    }
+
+    @Test
+    public void testHeadCategoriesProjects() throws IOException {
+        String option = "/categories/1/projects";
+        String head = TodoInstance.getHeadContentType(option);
+        assertEquals("application/json", head);
+    }
+
+    @Test
+    public void testHeadCategoriesTodos() throws IOException {
+        String option = "/categories/1/todos";
+        String head = TodoInstance.getHeadContentType(option);
+        assertEquals("application/json", head);
+    }
 }

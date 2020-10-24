@@ -41,7 +41,7 @@ public class TestProjects {
 
     @Test
     public void testGetInvalidProjectTitle() throws IOException {
-
+        //todo: Can you get using title?
     }
 
     //GET projects/id
@@ -131,6 +131,22 @@ public class TestProjects {
 
         JSONObject result = TodoInstance.send("DELETE",invalid_id);
         assertEquals(null, result);
+    }
+
+    //Delete relationship between projects and todos
+    @Test
+    public void testDeleteTaskOfProjects() throws IOException {
+        String valid_task = "/projects/1/tasks/1";
+        TodoInstance.send("DELETE",valid_task);
+        JSONObject response = TodoInstance.send("GET","/projects/1/tasks");
+        //todo: ASSERT NEEDED HERE
+    }
+
+    @Test
+    public void testDeleteInvalidTaskOfProjects() throws IOException {
+        String invalid_taskof = "/todos/1/tasksof/3";
+        int result = TodoInstance.getStatusCode("DELETE",invalid_taskof);
+        assertEquals(TodoInstance.SC_NOT_FOUND, result);
     }
 
     //HEAD Projects
