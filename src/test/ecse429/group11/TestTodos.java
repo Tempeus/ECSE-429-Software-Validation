@@ -1,6 +1,5 @@
 package ecse429.group11;
 
-import static ecse429.group11.TodoInstance.send;
 import static org.junit.Assert.assertEquals;
 
 
@@ -31,7 +30,7 @@ public class TestTodos {
 
     @Test
     public void testGetAllTodos() throws IOException {
-        JSONObject response = send("GET", "/todos");
+        JSONObject response = TodoInstance.send("GET", "/todos");
         assertEquals(2,response.getJSONArray("todos").length());
     }
 
@@ -46,49 +45,49 @@ public class TestTodos {
     @Test
     public void testGetByInvalidTitle() throws IOException {
         String invalid_title = "/todos?title=mothman";
-        JSONObject response = send("GET", invalid_title);
+        JSONObject response = TodoInstance.send("GET", invalid_title);
         assertEquals(0,response.getJSONArray("todos").length());
     }
 
     @Test
     public void testGetByDoneStatusTrue() throws IOException {
         String donestatus_true = "/todos?doneStatus=true";
-        JSONObject response = send("GET", donestatus_true);
+        JSONObject response = TodoInstance.send("GET", donestatus_true);
         assertEquals(0,response.getJSONArray("todos").length());
     }
 
     @Test
     public void testGetByDoneStatusFalse() throws IOException {
         String donestatus_true = "/todos?doneStatus=false";
-        JSONObject response = send("GET", donestatus_true);
+        JSONObject response = TodoInstance.send("GET", donestatus_true);
         assertEquals(2,response.getJSONArray("todos").length());
     }
 
     @Test
     public void testGetByInvalidDoneStatus() throws IOException {
         String donestatus_invalid = "/todos?doneStatus=maybe";
-        JSONObject response = send("GET", donestatus_invalid);
+        JSONObject response = TodoInstance.send("GET", donestatus_invalid);
         assertEquals(0,response.getJSONArray("todos").length());
     }
 
     @Test
     public void testGetByDescription() throws IOException {
         String description = "/todos?description=";
-        JSONObject response = send("GET", description);
+        JSONObject response = TodoInstance.send("GET", description);
         assertEquals(2,response.getJSONArray("todos").length());
     }
 
     @Test
     public void testGetByInvalidDescription() throws IOException{
         String description = "/todos?description=NonExistent";
-        JSONObject response = send("GET", description);
+        JSONObject response = TodoInstance.send("GET", description);
         assertEquals(0,response.getJSONArray("todos").length());
     }
 
     //GET todos/id
     @Test
     public void testGetSpecificTodoUsingID() throws IOException{
-        JSONObject response = send("GET", "/todos/1");
+        JSONObject response = TodoInstance.send("GET", "/todos/1");
         String expected = "1";
         String result = response.getJSONArray("todos").getJSONObject(0).getString("id");
         assertEquals(result, expected);
@@ -110,21 +109,30 @@ public class TestTodos {
     @Test
     public void testCreateValidTodo(){
         String validID = "/todos";
+        JSONObject response = new JSONObject();
+        response.put("title", "TitleTest");
+        response.put("description", "DescriptionTest");
+        response.put("doneStatus", "TRUE");
+        //What do i do next? create a function? Use send?
     }
 
     @Test
     public void testCreateWithOnlyTitle(){
-
+        JSONObject response = new JSONObject();
+        response.put("title", "TitleTest");
     }
 
     @Test
     public void TestCreateWithExistingTitle(){
-
+        JSONObject response = new JSONObject();
+        response.put("title", "file paperwork");
     }
 
     @Test
     public void testCreateInvalidTodo(){
-
+        JSONObject response = new JSONObject();
+        response.put("description", "DescriptionTest");
+        response.put("doneStatus", "TRUE");
     }
 
     //POST todos/id
