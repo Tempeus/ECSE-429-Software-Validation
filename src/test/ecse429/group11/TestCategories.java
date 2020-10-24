@@ -1,6 +1,7 @@
 package ecse429.group11;
 
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -8,6 +9,11 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 
 public class TestCategories {
+
+    @Before
+    public void startInstance(){
+        TodoInstance.runApplication();
+    }
 
     //GET categories
     @Test
@@ -122,8 +128,10 @@ public class TestCategories {
     }
 
     @Test
-    public void testDeleteInvalidProjectsOfCategories(){
-
+    public void testDeleteInvalidProjectsOfCategories() throws IOException {
+        String invalid_projects = "/categories/1/projects/3";
+        int result = TodoInstance.getStatusCode("DELETE",invalid_projects);
+        assertEquals(TodoInstance.SC_NOT_FOUND, result);
     }
 
     @Test
@@ -132,8 +140,10 @@ public class TestCategories {
     }
 
     @Test
-    public void testDeleteInvalidTodosOfCategories(){
-
+    public void testDeleteInvalidTodosOfCategories() throws IOException {
+        String invalid_todos = "/categories/1/todos/3";
+        int result = TodoInstance.getStatusCode("DELETE",invalid_todos);
+        assertEquals(TodoInstance.SC_NOT_FOUND, result);
     }
 
     //HEAD categories

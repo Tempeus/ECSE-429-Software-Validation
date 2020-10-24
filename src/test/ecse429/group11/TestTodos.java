@@ -2,25 +2,20 @@ package ecse429.group11;
 
 import static org.junit.Assert.assertEquals;
 
-
-import io.restassured.internal.mapping.JsonbMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 
 public class TestTodos {
 
-//    @Before
-//    public void startInstance(){
-//        TodoInstance.runApplication();
-//    }
-
-//    @After
-//    public void deadifyInstance(){
-//        TodoInstance.killInstance();
-//    }
+    @Before
+    public void startInstance(){
+        TodoInstance.runApplication();
+    }
 
     //GET todos
     @Test

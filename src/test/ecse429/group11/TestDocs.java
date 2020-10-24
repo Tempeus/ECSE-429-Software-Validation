@@ -1,5 +1,6 @@
 package ecse429.group11;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -7,6 +8,11 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 
 public class TestDocs {
+
+    @Before
+    public void startInstance(){
+        TodoInstance.runApplication();
+    }
 
     @Test
     public void testGetDocsStatusCode() throws IOException {

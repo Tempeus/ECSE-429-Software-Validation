@@ -12,6 +12,8 @@ import java.net.URL;
 
 public class TodoInstance {
 
+    private static Process process;
+
     //List of status codes that will be referred during the UNIT TESTING
     public static final int SC_SUCCESS = 200;
     public static final int SC_CREATED = 201;
@@ -22,8 +24,10 @@ public class TodoInstance {
     private static final String baseURL = "http://localhost:4567";
 
     public static void runApplication(){
+        final Runtime re = Runtime.getRuntime();
+        ProcessBuilder pb = new ProcessBuilder("java", "-jar", "../runTodoManagerRestAPI-1.5.5.jar");
         try {
-            Process process = Runtime.getRuntime().exec("java -jar runTodoManagerRestAPI-1.5.5.jar");
+            Process ps = pb.start();
         } catch (IOException e) {
             e.printStackTrace();
         }

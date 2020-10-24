@@ -1,5 +1,6 @@
 package ecse429.group11;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -9,7 +10,10 @@ import static org.junit.Assert.assertEquals;
 
 public class TestShutdown {
 
-    //todo: Implement restarting server @after
+    @Before
+    public void startInstance(){
+        TodoInstance.runApplication();
+    }
 
     @Test
     public void testShutdownServer(){
