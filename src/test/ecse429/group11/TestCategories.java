@@ -66,4 +66,8 @@ public class TestCategories {
     public void testFailCreateCategoryNoTitle(){
 
     }
+
+    //DELETE categories
+
+    //DELETE categories/id
 }

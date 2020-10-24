@@ -105,6 +105,41 @@ public class TestTodos {
         assertEquals(TodoInstance.getStatusCode(valid_request),TodoInstance.SC_SUCCESS);
     }
 
+    @Test
+    public void testGetTaskOfTodo() throws IOException {
+        String valid_request = "/todos/1/tasksof";
+        assertEquals(TodoInstance.getStatusCode(valid_request),TodoInstance.SC_SUCCESS);
+        JSONObject response = TodoInstance.send("GET", valid_request);
+        assertEquals(1,response.getJSONArray("projects").length());
+        //Todo: Go through array and get the index of ID 1
+        int id_indx = 0;
+        assertEquals("1",response.getJSONArray("projects").getJSONObject(0).getJSONArray("tasks").getJSONObject(id_indx).getString("id"));
+    }
+
+    @Test
+    public void testGetInvalidTaskOfTodo() throws IOException {
+        String invalid_taskof = "/todos/1/tasksof/3";
+        int result = TodoInstance.getStatusCode(invalid_taskof);
+        assertEquals(TodoInstance.SC_NOT_FOUND, result);
+    }
+
+    @Test
+    public void testGetCategoriesOfTodo() throws IOException {
+        String valid_request = "/todos/1/categories";
+        JSONObject response = TodoInstance.send("GET",valid_request);
+        assertEquals(1,response.getJSONArray("categories").length());
+        assertEquals("1",response.getJSONArray("categories").getJSONObject(0).getString("id"));
+        assertEquals("Office",response.getJSONArray("categories").getJSONObject(0).getString("title"));
+
+    }
+
+    @Test
+    public void testGetInvalidCategoriesOfTodo() throws IOException {
+        String invalid_categories = "/todos/1/categories/3";
+        int result = TodoInstance.getStatusCode(invalid_categories);
+        assertEquals(TodoInstance.SC_NOT_FOUND, result);
+    }
+
     //POST todos
     @Test
     public void testCreateValidTodo(){
@@ -113,6 +148,8 @@ public class TestTodos {
         response.put("title", "TitleTest");
         response.put("description", "DescriptionTest");
         response.put("doneStatus", "TRUE");
+
+        System.out.println(response.toString());
         //What do i do next? create a function? Use send?
     }
 
@@ -137,6 +174,27 @@ public class TestTodos {
 
     //POST todos/id
     @Test
+    public void testUpdateWithID(){
+
+    }
+
+    @Test
+    public void testUpdateTitle(){
+
+    }
+
+    @Test
+    public void testUpdateDoneStatus(){
+
+    }
+
+    @Test
+    public void testUpdateDescription(){
+
+    }
+
+    //PUT todos/id
+    @Test
     public void testOverrideWithID(){
 
     }
@@ -156,8 +214,89 @@ public class TestTodos {
 
     }
 
-    //HEAD todos
+    //DELETE todos
+    @Test
+    public void testDeleteAllTodos() throws IOException {
+        String option = "/todos";
+        assertEquals(TodoInstance.SC_UNSUPPORTED,TodoInstance.getStatusCode("DELETE", option));
+    }
 
-    //HEAD todos/id
+    //DELETE todos/id
+
+    @Test
+    public void testDeleteValidTodo() throws IOException {
+        String valid_id = "/todos/1";
+        assertEquals(TodoInstance.getStatusCode(valid_id), TodoInstance.SC_SUCCESS);
+        TodoInstance.send("DELETE",valid_id);
+        assertEquals(TodoInstance.getStatusCode(valid_id), TodoInstance.SC_NOT_FOUND);
+    }
+
+    @Test
+    public void testDeleteInvalidTodo() throws IOException {
+        String invalid_id = "/todos/3";
+
+        JSONObject result = TodoInstance.send("DELETE",invalid_id);
+        assertEquals(null, result);
+    }
+
+    //Delete relationship between projects and todos
+    @Test
+    public void testDeleteTaskOfTodo() throws IOException {
+        String valid_taskof = "/todos/1/tasksof/1";
+        TodoInstance.send("DELETE",valid_taskof);
+        JSONObject response = TodoInstance.send("GET","/todos/1/tasksof");
+        assertEquals(0,response.getJSONArray("projects").length());
+    }
+
+    @Test
+    public void testDeleteInvalidTaskOfTodo() throws IOException {
+        String invalid_taskof = "/todos/1/tasksof/3";
+        int result = TodoInstance.getStatusCode("DELETE",invalid_taskof);
+        assertEquals(TodoInstance.SC_NOT_FOUND, result);
+    }
+
+    @Test
+    public void testDeleteValidCategoriesOfTodo() throws IOException {
+        String valid_categories = "/todos/1/categories/1";
+        TodoInstance.send("DELETE",valid_categories);
+        JSONObject response = TodoInstance.send("GET","/todos/1/categories");
+        assertEquals(0,response.getJSONArray("categories").length());
+    }
+
+    @Test
+    public void testDeleteInvalidCategoriesOfTodo() throws IOException {
+        String invalid_categories = "/todos/1/categories/3";
+        int result = TodoInstance.getStatusCode("DELETE",invalid_categories);
+        assertEquals(TodoInstance.SC_NOT_FOUND, result);
+    }
+
+    //HEAD todos
+    @Test
+    public void testHeadTodos() throws IOException {
+        String option = "/todos";
+        String head = TodoInstance.getHeadContentType(option);
+        assertEquals("application/json", head);
+    }
+
+    @Test
+    public void testHeadTodosID() throws IOException{
+        String option = "/todos/1";
+        String head = TodoInstance.getHeadContentType(option);
+        assertEquals("application/json", head);
+    }
+
+    @Test
+    public void testHeadTodosTasksOf() throws IOException{
+        String option = "/todos/1/tasksof";
+        String head = TodoInstance.getHeadContentType(option);
+        assertEquals("application/json", head);
+    }
+
+    @Test
+    public void testHeadTodosCategories() throws IOException{
+        String option = "/todos/1/categories";
+        String head = TodoInstance.getHeadContentType(option);
+        assertEquals("application/json", head);
+    }
 
 }

@@ -67,6 +67,9 @@ public class TestProjects {
     public void testCreateProjectWithNoInfo(){
 
     }
-    //HEAD Projects
+
+    //DELETE Projects
+
+    //DELETE Projects/id
 
 }
