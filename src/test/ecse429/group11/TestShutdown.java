@@ -1,5 +1,6 @@
 package ecse429.group11;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,6 +14,11 @@ public class TestShutdown {
     @Before
     public void startInstance(){
         TodoInstance.runApplication();
+    }
+
+    @After
+    public void killInstance(){
+        TodoInstance.killInstance();
     }
 
     @Test

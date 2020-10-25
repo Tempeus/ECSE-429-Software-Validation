@@ -111,9 +111,7 @@ public class TestTodos {
         assertEquals(TodoInstance.getStatusCode(valid_request),TodoInstance.SC_SUCCESS);
         JSONObject response = TodoInstance.send("GET", valid_request);
         assertEquals(1,response.getJSONArray("projects").length());
-        //Todo: Go through array and get the index of ID 1
-        int id_indx = 0;
-        assertEquals("1",response.getJSONArray("projects").getJSONObject(0).getJSONArray("tasks").getJSONObject(id_indx).getString("id"));
+        assertEquals("1",response.getJSONArray("projects").getJSONObject(0).getJSONArray("tasks").getJSONObject(0).getString("id"));
     }
 
     @Test
@@ -168,7 +166,7 @@ public class TestTodos {
         JSONObject json = new JSONObject();
         json.put("title", title);
         TodoInstance.post(validID,json.toString());
-        Thread.sleep(200);
+        Thread.sleep(250);
 
         JSONObject response = TodoInstance.send("GET", "/todos");
         System.out.println(response);
