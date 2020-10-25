@@ -2,6 +2,7 @@ package ecse429.group11;
 
 import static org.junit.Assert.assertEquals;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
@@ -99,26 +100,213 @@ public class TestProjects {
         int result = TodoInstance.getStatusCode(invalid_categories);
         assertEquals(TodoInstance.SC_NOT_FOUND, result);
     }
+
     //POST Projects
+    @Test
+    public void testCreateValidProjects() throws IOException, InterruptedException {
+        String validID = "/projects";
+        String title = "TitleTest";
+        String description = "DescriptionTest";
+
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        json.put("description", description);
+        TodoInstance.post(validID,json.toString());
+        Thread.sleep(500);
+
+        JSONObject response = TodoInstance.send("GET", "/projects");
+        System.out.println(response);
+        assertEquals(2,response.getJSONArray("projects").length());
+    }
 
     @Test
-    public void testCreateProject(){
+    public void testCreateWithOnlyTitle() throws IOException, InterruptedException {
+        String validID = "/projects";
+        String title = "TitleTest";
+
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        TodoInstance.post(validID,json.toString());
+        Thread.sleep(500);
+
+        JSONObject response = TodoInstance.send("GET", "/projects");
+        System.out.println(response);
+        assertEquals(2,response.getJSONArray("projects").length());
+    }
+
+    @Test
+    public void testCreateWithExistingTitle() throws IOException, InterruptedException {
+        String validID = "/projects";
+        String title = "Office Work";
+
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        TodoInstance.post(validID,json.toString());
+        Thread.sleep(500);
+
+        JSONObject response = TodoInstance.send("GET", "/projects");
+        assertEquals(2,response.getJSONArray("projects").length());
+    }
+
+    @Test
+    public void testCreateInvalidCategories(){
+        //Todo: implement
+    }
+
+    //POST projects/id
+    @Test
+    public void testUpdateTitle() throws IOException, InterruptedException {
+        String validID = "/projects/1";
+        String title = "NEWTITLE";
+
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        TodoInstance.post(validID,json.toString());
+        Thread.sleep(500);
+
+        JSONObject response = TodoInstance.send("GET", "/projects/1");
+        assertEquals(title,response.getJSONArray("projects").getJSONObject(0).get("title"));
 
     }
 
     @Test
-    public void testCreateProjectWithTitle(){
+    public void testUpdateDescription() throws IOException, InterruptedException {
+        String validID = "/projects/1";
+        String description = "DESCRIPTION";
 
+        JSONObject json = new JSONObject();
+        json.put("description", description);
+        TodoInstance.post(validID,json.toString());
+        Thread.sleep(500);
+
+        JSONObject response = TodoInstance.send("GET", "/projects/1");
+        assertEquals("DESCRIPTION",response.getJSONArray("projects").getJSONObject(0).get("description"));
     }
 
     @Test
-    public void testCreateProjectWithNoTitle(){
+    public void testUpdateCompletion() throws IOException, InterruptedException {
+        String validID = "/projects/1";
+        boolean completed = true;
 
+        JSONObject json = new JSONObject();
+        json.put("completed", completed);
+        TodoInstance.post(validID,json.toString());
+        Thread.sleep(500);
+
+        JSONObject response = TodoInstance.send("GET", "/projects/1");
+        assertEquals("true",response.getJSONArray("projects").getJSONObject(0).get("completed"));
     }
 
     @Test
-    public void testCreateProjectWithNoInfo(){
+    public void testUpdateActive() throws IOException, InterruptedException {
+        String validID = "/projects/1";
+        boolean active = true;
 
+        JSONObject json = new JSONObject();
+        json.put("active", active);
+        TodoInstance.post(validID,json.toString());
+        Thread.sleep(500);
+
+        JSONObject response = TodoInstance.send("GET", "/projects/1");
+        assertEquals("true",response.getJSONArray("projects").getJSONObject(0).get("active"));
+    }
+
+    //PUT projects/id
+    @Test
+    public void testOverrideTitle() throws IOException, InterruptedException {
+        String validID = "/projects/1";
+        String title = "NEWTITLE";
+
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        TodoInstance.put(validID,json.toString());
+        Thread.sleep(500);
+
+        JSONObject response = TodoInstance.send("GET", "/projects/1");
+        assertEquals(title,response.getJSONArray("projects").getJSONObject(0).get("title"));
+        boolean NotExist = false;
+        try{
+            response.getJSONArray("projects").getJSONObject(0).get("tasks");
+        } catch(JSONException e) {
+            NotExist = true;
+        }
+
+        assertEquals(true,NotExist);
+    }
+
+    @Test
+    public void testOverrideDescription() throws IOException, InterruptedException {
+        String validID = "/projects/1";
+        String title = "NEWTITLE";
+        String description = "DESCRIPTION";
+
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        json.put("description", description);
+        TodoInstance.put(validID,json.toString());
+        Thread.sleep(500);
+
+        JSONObject response = TodoInstance.send("GET", "/projects/1");
+        assertEquals(title,response.getJSONArray("projects").getJSONObject(0).get("title"));
+        assertEquals("DESCRIPTION",response.getJSONArray("projects").getJSONObject(0).get("description"));
+        boolean NotExist = false;
+        try{
+            response.getJSONArray("projects").getJSONObject(0).get("tasks");
+        } catch(JSONException e) {
+            NotExist = true;
+        }
+
+        assertEquals(true,NotExist);
+    }
+
+    @Test
+    public void testOverrideCompleted() throws IOException, InterruptedException {
+        String validID = "/projects/1";
+        String title = "NEWTITLE";
+        boolean completed = true;
+
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        json.put("completed", completed);
+        TodoInstance.put(validID,json.toString());
+        Thread.sleep(500);
+
+        JSONObject response = TodoInstance.send("GET", "/projects/1");
+        assertEquals(title,response.getJSONArray("projects").getJSONObject(0).get("title"));
+        assertEquals("true",response.getJSONArray("projects").getJSONObject(0).get("completed"));
+        boolean NotExist = false;
+        try{
+            response.getJSONArray("projects").getJSONObject(0).get("tasks");
+        } catch(JSONException e) {
+            NotExist = true;
+        }
+
+        assertEquals(true,NotExist);
+    }
+
+    @Test
+    public void testOverrideActive() throws IOException, InterruptedException {
+        String validID = "/projects/1";
+        String title = "NEWTITLE";
+        boolean active = true;
+
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        json.put("active", active);
+        TodoInstance.put(validID,json.toString());
+        Thread.sleep(500);
+
+        JSONObject response = TodoInstance.send("GET", "/projects/1");
+        assertEquals(title,response.getJSONArray("projects").getJSONObject(0).get("title"));
+        assertEquals("true",response.getJSONArray("projects").getJSONObject(0).get("active"));
+        boolean NotExist = false;
+        try{
+            response.getJSONArray("projects").getJSONObject(0).get("tasks");
+        } catch(JSONException e) {
+            NotExist = true;
+        }
+
+        assertEquals(true,NotExist);
     }
 
     //DELETE Projects

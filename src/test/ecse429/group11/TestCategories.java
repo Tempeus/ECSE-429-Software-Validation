@@ -125,7 +125,7 @@ public class TestCategories {
     @Test
     public void testCreateWithExistingTitle() throws IOException, InterruptedException {
         String validID = "/categories";
-        String title = "file paperwork";
+        String title = "Office";
 
         JSONObject json = new JSONObject();
         json.put("title", title);
@@ -170,7 +170,7 @@ public class TestCategories {
         assertEquals("DESCRIPTION",response.getJSONArray("categories").getJSONObject(0).get("description"));
     }
 
-    //PUT todos/id
+    //PUT categories/id
     @Test
     public void testOverrideTitle() throws IOException, InterruptedException {
         String validID = "/categories/1";
@@ -183,15 +183,6 @@ public class TestCategories {
 
         JSONObject response = TodoInstance.send("GET", "/categories/1");
         assertEquals(title,response.getJSONArray("categories").getJSONObject(0).get("title"));
-        boolean NotExist = false;
-        try{
-            response.getJSONArray("categories").getJSONObject(0).get("categories");
-            response.getJSONArray("categories").getJSONObject(0).get("tasksof");
-        } catch(JSONException e) {
-            NotExist = true;
-        }
-
-        assertEquals(true,NotExist);
     }
 
     @Test
@@ -209,16 +200,6 @@ public class TestCategories {
         JSONObject response = TodoInstance.send("GET", "/categories/1");
         assertEquals(title,response.getJSONArray("categories").getJSONObject(0).get("title"));
         assertEquals("DESCRIPTION",response.getJSONArray("categories").getJSONObject(0).get("description"));
-        System.out.println(response);
-        boolean NotExist = false;
-        try{
-            response.getJSONArray("todos").getJSONObject(0).get("categories");
-            response.getJSONArray("todos").getJSONObject(0).get("tasksof");
-        } catch(JSONException e) {
-            NotExist = true;
-        }
-
-        assertEquals(true,NotExist);
     }
 
     //DELETE categories
