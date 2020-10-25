@@ -17,6 +17,11 @@ public class TestTodos {
         TodoInstance.runApplication();
     }
 
+    @After
+    public void killInstance(){
+        TodoInstance.killInstance();
+    }
+
     //GET todos
     @Test
     public void testGetStatusCode() throws IOException {
@@ -137,15 +142,27 @@ public class TestTodos {
 
     //POST todos
     @Test
-    public void testCreateValidTodo(){
+    public void testCreateValidTodo() throws IOException {
         String validID = "/todos";
-        JSONObject response = new JSONObject();
-        response.put("title", "TitleTest");
-        response.put("description", "DescriptionTest");
-        response.put("doneStatus", "TRUE");
+        String title = "TitleTest";
+        String description = "DescriptionTest";
+        String donestatus = "TRUE";
+        JSON[] json_obj = new JSON[3];
+        json_obj[0] = new JSON("title", title);
+        json_obj[1] = new JSON("description", description);
+        json_obj[2] = new JSON("doneStatus", donestatus);
+        String json = TodoInstance.JSONConvert(json_obj);
+        TodoInstance.post(validID,json);
 
-        System.out.println(response.toString());
-        //What do i do next? create a function? Use send?
+        JSONObject response = TodoInstance.send("GET", "/todos");
+        assertEquals(3,response.getJSONArray("todos").length());
+
+        //Find by title
+        //Find by desc
+        //Find by donestatus
+        assertEquals(response.getJSONArray("todos").getJSONObject(2).getString("title"),title);
+        assertEquals(response.getJSONArray("todos").getJSONObject(2).getString("description"),description);
+        assertEquals(response.getJSONArray("todos").getJSONObject(2).getString("doneStatus"),donestatus);
     }
 
     @Test

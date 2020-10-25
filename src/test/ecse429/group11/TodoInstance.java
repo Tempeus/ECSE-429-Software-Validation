@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -23,22 +24,20 @@ public class TodoInstance {
 
     private static final String baseURL = "http://localhost:4567";
 
+    public static Process ps;
+
     public static void runApplication(){
         final Runtime re = Runtime.getRuntime();
         ProcessBuilder pb = new ProcessBuilder("java", "-jar", "../runTodoManagerRestAPI-1.5.5.jar");
         try {
-            Process ps = pb.start();
+            ps = pb.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public static void killInstance(){
-        try {
-            send("GET","/shutdown");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ps.destroy();
     }
 
     public static JSONObject send(String type, String option) throws IOException {
@@ -62,8 +61,19 @@ public class TodoInstance {
         return json;
     }
 
-    public static boolean post(){
-        return false;
+    public static boolean post(String option, String JSONInputString) throws IOException {
+        URL url = new URL(baseURL + option);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+        connection.setDoOutput(true);
+        byte[] input = JSONInputString.getBytes("utf-8");
+        connection.setFixedLengthStreamingMode(input.length);
+        connection.connect();
+        try(OutputStream os = connection.getOutputStream()) {
+            os.write(input);
+        }
+        return true;
     }
 
     public static String getHeadContentType(String option) throws IOException {
@@ -87,5 +97,27 @@ public class TodoInstance {
         HttpURLConnection http;
         http = (HttpURLConnection)url.openConnection();
         return http.getResponseCode();
+    }
+
+    public static String JSONConvert(JSON json[]){
+        StringBuilder result = new StringBuilder();
+        result.append("{");
+        int i;
+        for(i = 0; i < json.length - 1; i++){
+            result.append("\"" + json[i].key + "\": \"" + json[i].value + "\",");
+        }
+        result.append("\"" + json[i].key + "\": \"" + json[i].value + "\"");
+        result.append("}");
+
+        return result.toString();
+    }
+
+    public static void main(String[] args){
+        JSON[] json = new JSON[3];
+        json[0] = new JSON("password", "maga2020");
+        json[1] = new JSON("title", "faketitlel");
+        json[2] = new JSON("title", "faketitlel");
+
+        System.out.println(JSONConvert(json));
     }
 }
