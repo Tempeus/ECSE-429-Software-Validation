@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -65,14 +66,16 @@ public class TodoInstance {
         URL url = new URL(baseURL + option);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+        connection.setRequestProperty("Content-Type", "application/json; utf-8");
+        connection.setRequestProperty("Accept", "application/json");
         connection.setDoOutput(true);
         byte[] input = JSONInputString.getBytes("utf-8");
         connection.setFixedLengthStreamingMode(input.length);
         connection.connect();
         try(OutputStream os = connection.getOutputStream()) {
-            os.write(input);
+            os.write(input,0,input.length);
         }
+
         return true;
     }
 
@@ -99,25 +102,12 @@ public class TodoInstance {
         return http.getResponseCode();
     }
 
-    public static String JSONConvert(JSON json[]){
-        StringBuilder result = new StringBuilder();
-        result.append("{");
-        int i;
-        for(i = 0; i < json.length - 1; i++){
-            result.append("\"" + json[i].key + "\": \"" + json[i].value + "\",");
-        }
-        result.append("\"" + json[i].key + "\": \"" + json[i].value + "\"");
-        result.append("}");
+    public static void main(String[] args) throws IOException {
 
-        return result.toString();
-    }
+        JSONObject test = new JSONObject();
+        test.put("title", "test1");
+        test.put("doneStatus", true);
 
-    public static void main(String[] args){
-        JSON[] json = new JSON[3];
-        json[0] = new JSON("password", "maga2020");
-        json[1] = new JSON("title", "faketitlel");
-        json[2] = new JSON("title", "faketitlel");
-
-        System.out.println(JSONConvert(json));
+        TodoInstance.post("/todos",test.toString());
     }
 }

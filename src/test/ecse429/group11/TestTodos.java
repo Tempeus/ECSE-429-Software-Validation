@@ -142,27 +142,22 @@ public class TestTodos {
 
     //POST todos
     @Test
-    public void testCreateValidTodo() throws IOException {
+    public void testCreateValidTodo() throws IOException, InterruptedException {
         String validID = "/todos";
         String title = "TitleTest";
         String description = "DescriptionTest";
-        String donestatus = "TRUE";
-        JSON[] json_obj = new JSON[3];
-        json_obj[0] = new JSON("title", title);
-        json_obj[1] = new JSON("description", description);
-        json_obj[2] = new JSON("doneStatus", donestatus);
-        String json = TodoInstance.JSONConvert(json_obj);
-        TodoInstance.post(validID,json);
+        boolean donestatus = true;
+
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        json.put("description", description);
+        json.put("doneStatus", donestatus);
+        TodoInstance.post(validID,json.toString());
+        Thread.sleep(200);
 
         JSONObject response = TodoInstance.send("GET", "/todos");
+        System.out.println(response);
         assertEquals(3,response.getJSONArray("todos").length());
-
-        //Find by title
-        //Find by desc
-        //Find by donestatus
-        assertEquals(response.getJSONArray("todos").getJSONObject(2).getString("title"),title);
-        assertEquals(response.getJSONArray("todos").getJSONObject(2).getString("description"),description);
-        assertEquals(response.getJSONArray("todos").getJSONObject(2).getString("doneStatus"),donestatus);
     }
 
     @Test
