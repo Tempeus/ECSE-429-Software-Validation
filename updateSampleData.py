@@ -240,8 +240,9 @@ sizeCategories = len(categories.json().get("categories"))
 for i in range(sizeCategories):
     categoriesID = categoriesJson[i].get("id")
     categoryData = {"description": "PUT ammend " +
-                   categoriesJson[i].get("title") + ". ID#: " + categoriesID}
-    r = requests.put(url=URL + "/categories/" + categoriesID, json=categoryData)
+                    categoriesJson[i].get("title") + ". ID#: " + categoriesID}
+    r = requests.put(url=URL + "/categories/" +
+                     categoriesID, json=categoryData)
 
 categories = requests.get(url=URL + "/categories")
 
@@ -255,8 +256,9 @@ sizeCategories = len(categories.json().get("categories"))
 for i in range(sizeCategories):
     categoriesID = categoriesJson[i].get("id")
     categoryData = {"description": "PUT ammend " +
-                   categoriesJson[i].get("title") + ". ID#: " + categoriesID}
-    r = requests.put(url=URL + "/categories/" + categoriesID, json=categoryData)
+                    categoriesJson[i].get("title") + ". ID#: " + categoriesID}
+    r = requests.put(url=URL + "/categories/" +
+                     categoriesID, json=categoryData)
 
 categories = requests.get(url=URL + "/categories")
 
@@ -270,8 +272,9 @@ sizeCategories = len(categories.json().get("categories"))
 for i in range(sizeCategories):
     categoriesID = categoriesJson[i].get("id")
     categoryData = {"description": "POST ammend " +
-                   categoriesJson[i].get("title") + ". ID#: " + categoriesID}
-    r = requests.post(url=URL + "/categories/" + categoriesID, json=categoryData)
+                    categoriesJson[i].get("title") + ". ID#: " + categoriesID}
+    r = requests.post(url=URL + "/categories/" +
+                      categoriesID, json=categoryData)
 
 categories = requests.get(url=URL + "/categories")
 
@@ -311,7 +314,8 @@ categoriesJson = categories.json().get("categories")
 sizeCategories = len(categories.json().get("categories"))
 for i in range(sizeTodos):
     try:
-        categoriesID = requests.get(url=URL + "/categories").json().get("categories")[0].get("id")
+        categoriesID = requests.get(
+            url=URL + "/categories").json().get("categories")[0].get("id")
         r = requests.delete(url=URL + "/categories/" + categoriesID + "/todos/" +
                             requests.get(url=URL + "/todos").json().get("todos")[i].get("id"))
     except:
@@ -354,7 +358,8 @@ categoriesJson = categories.json().get("categories")
 sizeCategories = len(categories.json().get("categories"))
 for i in range(sizeProjects):
     try:
-        categoriesID = requests.get(url=URL + "/categories").json().get("categories")[0].get("id")
+        categoriesID = requests.get(
+            url=URL + "/categories").json().get("categories")[0].get("id")
         r = requests.delete(url=URL + "/categories/" + categoriesID + "/projects/" +
                             requests.get(url=URL + "/projects").json().get("projects")[i].get("id"))
     except:
