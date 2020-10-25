@@ -3,13 +3,13 @@
 #How to run script tests
 
 1.Create sample data <br />
-`<createSampleData.py>` 
+`createSampleData.py` 
 
 2.Update the sample data <br />
-`<updateSampleData.py>` 
+`updateSampleData.py` 
  
 3.Testing custom query <br />
-`<customQuery.py>` 
+`customQuery.py` 
 
 4.Delete sample data <br />
-`<deleteSampleData.py>` 
+`deleteSampleData.py` 
