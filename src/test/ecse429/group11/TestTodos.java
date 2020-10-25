@@ -17,6 +17,11 @@ public class TestTodos {
         TodoInstance.runApplication();
     }
 
+    @After
+    public void killInstance(){
+        TodoInstance.killInstance();
+    }
+
     //GET todos
     @Test
     public void testGetStatusCode() throws IOException {
@@ -137,15 +142,22 @@ public class TestTodos {
 
     //POST todos
     @Test
-    public void testCreateValidTodo(){
+    public void testCreateValidTodo() throws IOException, InterruptedException {
         String validID = "/todos";
-        JSONObject response = new JSONObject();
-        response.put("title", "TitleTest");
-        response.put("description", "DescriptionTest");
-        response.put("doneStatus", "TRUE");
+        String title = "TitleTest";
+        String description = "DescriptionTest";
+        boolean donestatus = true;
 
-        System.out.println(response.toString());
-        //What do i do next? create a function? Use send?
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        json.put("description", description);
+        json.put("doneStatus", donestatus);
+        TodoInstance.post(validID,json.toString());
+        Thread.sleep(200);
+
+        JSONObject response = TodoInstance.send("GET", "/todos");
+        System.out.println(response);
+        assertEquals(3,response.getJSONArray("todos").length());
     }
 
     @Test

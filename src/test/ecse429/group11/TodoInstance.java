@@ -5,7 +5,9 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
+
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -23,22 +25,20 @@ public class TodoInstance {
 
     private static final String baseURL = "http://localhost:4567";
 
+    public static Process ps;
+
     public static void runApplication(){
         final Runtime re = Runtime.getRuntime();
         ProcessBuilder pb = new ProcessBuilder("java", "-jar", "../runTodoManagerRestAPI-1.5.5.jar");
         try {
-            Process ps = pb.start();
+            ps = pb.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public static void killInstance(){
-        try {
-            send("GET","/shutdown");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ps.destroy();
     }
 
     public static JSONObject send(String type, String option) throws IOException {
@@ -62,8 +62,21 @@ public class TodoInstance {
         return json;
     }
 
-    public static boolean post(){
-        return false;
+    public static boolean post(String option, String JSONInputString) throws IOException {
+        URL url = new URL(baseURL + option);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json; utf-8");
+        connection.setRequestProperty("Accept", "application/json");
+        connection.setDoOutput(true);
+        byte[] input = JSONInputString.getBytes("utf-8");
+        connection.setFixedLengthStreamingMode(input.length);
+        connection.connect();
+        try(OutputStream os = connection.getOutputStream()) {
+            os.write(input,0,input.length);
+        }
+
+        return true;
     }
 
     public static String getHeadContentType(String option) throws IOException {
@@ -87,5 +100,14 @@ public class TodoInstance {
         HttpURLConnection http;
         http = (HttpURLConnection)url.openConnection();
         return http.getResponseCode();
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        JSONObject test = new JSONObject();
+        test.put("title", "test1");
+        test.put("doneStatus", true);
+
+        TodoInstance.post("/todos",test.toString());
     }
 }
