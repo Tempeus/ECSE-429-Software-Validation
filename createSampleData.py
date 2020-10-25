@@ -3,10 +3,6 @@ import random
 
 URL = "http://localhost:4567"
 
-proj = {'title': "what"}
-r = requests.post(url=URL + "/projects", json=proj)
-
-
 # Some TODOS
 someCategories = ["Work From Home", "Groceries", "House Keeping",
                   "Free Time", "Extra", "Homework", "Assignments", "Work From Garden"]
@@ -14,7 +10,7 @@ someCategories = ["Work From Home", "Groceries", "House Keeping",
 someProjects = ["FACC 200", "FACC 205", "ECSE 308",
                 "ECSE 309", "ECSE 310"]
 
-someTodos = ["read" 
+someTodos = ["read"
              "write pt1", "write pt2",
              "test pt1", "test pt2"]
 
