@@ -2,7 +2,7 @@ package ecse429.group11;
 
 import static org.junit.Assert.assertEquals;
 
-import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
@@ -161,15 +161,32 @@ public class TestTodos {
     }
 
     @Test
-    public void testCreateWithOnlyTitle(){
-        JSONObject response = new JSONObject();
-        response.put("title", "TitleTest");
+    public void testCreateWithOnlyTitle() throws IOException, InterruptedException {
+        String validID = "/todos";
+        String title = "TitleTest";
+
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        TodoInstance.post(validID,json.toString());
+        Thread.sleep(200);
+
+        JSONObject response = TodoInstance.send("GET", "/todos");
+        System.out.println(response);
+        assertEquals(3,response.getJSONArray("todos").length());
     }
 
     @Test
-    public void TestCreateWithExistingTitle(){
-        JSONObject response = new JSONObject();
-        response.put("title", "file paperwork");
+    public void TestCreateWithExistingTitle() throws IOException, InterruptedException {
+        String validID = "/todos";
+        String title = "file paperwork";
+
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        TodoInstance.post(validID,json.toString());
+        Thread.sleep(200);
+
+        JSONObject response = TodoInstance.send("GET", "/todos");
+        assertEquals(3,response.getJSONArray("todos").length());
     }
 
     @Test
@@ -180,45 +197,123 @@ public class TestTodos {
     }
 
     //POST todos/id
-    @Test
-    public void testUpdateWithID(){
 
+    @Test
+    public void testUpdateTitle() throws IOException, InterruptedException {
+        String validID = "/todos/1";
+        String title = "NEWTITLE";
+
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        TodoInstance.post(validID,json.toString());
+        Thread.sleep(500);
+
+        JSONObject response = TodoInstance.send("GET", "/todos/1");
+        assertEquals(title,response.getJSONArray("todos").getJSONObject(0).get("title"));
     }
 
     @Test
-    public void testUpdateTitle(){
+    public void testUpdateDoneStatus() throws IOException, InterruptedException {
+        String validID = "/todos/1";
+        boolean donestatus = true;
 
+        JSONObject json = new JSONObject();
+        json.put("doneStatus", donestatus);
+        TodoInstance.post(validID,json.toString());
+        Thread.sleep(500);
+
+        JSONObject response = TodoInstance.send("GET", "/todos/1");
+        assertEquals("true",response.getJSONArray("todos").getJSONObject(0).get("doneStatus"));
     }
 
     @Test
-    public void testUpdateDoneStatus(){
+    public void testUpdateDescription() throws IOException, InterruptedException {
+        String validID = "/todos/1";
+        String description = "DESCRIPTION";
 
-    }
+        JSONObject json = new JSONObject();
+        json.put("description", description);
+        TodoInstance.post(validID,json.toString());
+        Thread.sleep(500);
 
-    @Test
-    public void testUpdateDescription(){
-
+        JSONObject response = TodoInstance.send("GET", "/todos/1");
+        assertEquals("DESCRIPTION",response.getJSONArray("todos").getJSONObject(0).get("description"));
     }
 
     //PUT todos/id
     @Test
-    public void testOverrideWithID(){
+    public void testOverrideTitle() throws IOException, InterruptedException {
+        String validID = "/todos/1";
+        String title = "NEWTITLE";
 
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        TodoInstance.put(validID,json.toString());
+        Thread.sleep(500);
+
+        JSONObject response = TodoInstance.send("GET", "/todos/1");
+        assertEquals(title,response.getJSONArray("todos").getJSONObject(0).get("title"));
+        boolean NotExist = false;
+        try{
+            response.getJSONArray("todos").getJSONObject(0).get("categories");
+            response.getJSONArray("todos").getJSONObject(0).get("tasksof");
+        } catch(JSONException e) {
+            NotExist = true;
+        }
+
+        assertEquals(true,NotExist);
     }
 
     @Test
-    public void testOverrideTitle(){
+    public void testOverrideDoneStatus() throws IOException, InterruptedException {
+        String validID = "/todos/1";
+        String title = "NEWTITLE";
+        boolean donestatus = true;
 
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        json.put("doneStatus", donestatus);
+        TodoInstance.put(validID,json.toString());
+        Thread.sleep(500);
+
+        JSONObject response = TodoInstance.send("GET", "/todos/1");
+        assertEquals(title,response.getJSONArray("todos").getJSONObject(0).get("title"));
+        assertEquals("true",response.getJSONArray("todos").getJSONObject(0).get("doneStatus"));
+        boolean NotExist = false;
+        try{
+            response.getJSONArray("todos").getJSONObject(0).get("categories");
+            response.getJSONArray("todos").getJSONObject(0).get("tasksof");
+        } catch(JSONException e) {
+            NotExist = true;
+        }
+
+        assertEquals(true,NotExist);
     }
 
     @Test
-    public void testOverrideDoneStatus(){
+    public void testOverrideDescription() throws IOException, InterruptedException {
+        String validID = "/todos/1";
+        String title = "NEWTITLE";
+        String description = "DESCRIPTION";
 
-    }
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        json.put("description", description);
+        TodoInstance.put(validID,json.toString());
+        Thread.sleep(500);
 
-    @Test
-    public void testOverrideDescription(){
+        JSONObject response = TodoInstance.send("GET", "/todos/1");
+        assertEquals(title,response.getJSONArray("todos").getJSONObject(0).get("title"));
+        assertEquals("DESCRIPTION",response.getJSONArray("todos").getJSONObject(0).get("description"));
+        boolean NotExist = false;
+        try{
+            response.getJSONArray("todos").getJSONObject(0).get("categories");
+            response.getJSONArray("todos").getJSONObject(0).get("tasksof");
+        } catch(JSONException e) {
+            NotExist = true;
+        }
 
+        assertEquals(true,NotExist);
     }
 
     //DELETE todos
