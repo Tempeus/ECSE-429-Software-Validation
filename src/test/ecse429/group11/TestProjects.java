@@ -370,6 +370,28 @@ public class TestProjects {
         assertEquals(TodoInstance.SC_NOT_FOUND, result);
     }
 
+    @Test
+    public void testDeleteCategoriesOfProjects() throws IOException {
+        //Need to create a link categories
+        JSONObject json = new JSONObject();
+        json.put("id", "1");
+        TodoInstance.post("/projects/1/categories", json.toString());
+
+        JSONObject response = TodoInstance.send("GET", "/projects/1/categories");
+        assertEquals(1,response.getJSONArray("categories").length());
+        String valid_task = "/projects/1/categories/1";
+        TodoInstance.send("DELETE",valid_task);
+        response = TodoInstance.send("GET","/projects/1/categories");
+        assertEquals(0, response.getJSONArray("categories").length());
+    }
+
+    @Test
+    public void testDeleteInvalidcategoriesOfProjects() throws IOException {
+        String invalid_taskof = "/todos/1/categories/3";
+        int result = TodoInstance.getStatusCode("DELETE",invalid_taskof);
+        assertEquals(TodoInstance.SC_NOT_FOUND, result);
+    }
+
     //HEAD Projects
     @Test
     public void testHeadProjects() throws IOException {
