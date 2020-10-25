@@ -2,14 +2,14 @@
 
 #How to run script tests
 
-1.Create sample data
-`<addr>` >createSampleData.py
+1.Create sample data \n
+`<createSampleData.py>` 
 
-2.Update the sample data
-`<addr>` >updateSampleData.py
+2.Update the sample data \n 
+`<updateSampleData.py>` 
+ 
+3.Testing custom query \n
+`<customQuery.py>` 
 
-3.Testing custom query
-`<addr>` >customQuery.py
-
-4.Delete sample data
-`<addr>` >deleteSampleData.py
+4.Delete sample data \n
+`<deleteSampleData.py>` 
