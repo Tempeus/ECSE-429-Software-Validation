@@ -2,14 +2,14 @@
 
 #How to run script tests
 
-1.Create sample data <\br>
+1.Create sample data <br />
 `<createSampleData.py>` 
 
-2.Update the sample data <\br>
+2.Update the sample data <br />
 `<updateSampleData.py>` 
  
-3.Testing custom query <\br>
+3.Testing custom query <br />
 `<customQuery.py>` 
 
-4.Delete sample data <\br>
+4.Delete sample data <br />
 `<deleteSampleData.py>` 
