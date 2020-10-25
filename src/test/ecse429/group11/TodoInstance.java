@@ -37,9 +37,13 @@ public class TodoInstance {
         }
     }
 
-    public static void killInstance() throws InterruptedException {
+    public static void killInstance(){
         ps.destroy();
-        Thread.sleep(200);
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static JSONObject send(String type, String option) throws IOException {
