@@ -52,11 +52,6 @@ public class TestProjects {
         assertEquals("false", result);
     }
 
-    @Test
-    public void testGetInvalidProjectTitle() throws IOException {
-        //todo: Can you get using title?
-    }
-
     //GET projects/id
     @Test
     public void testGetSpecificProjectUsingID() throws IOException {
@@ -149,8 +144,33 @@ public class TestProjects {
     }
 
     @Test
-    public void testCreateInvalidCategories(){
-        //Todo: implement
+    public void testCreateWithoutTitle() throws IOException {
+        JSONObject json = new JSONObject();
+        json.put("description", "DescriptionTest");
+        TodoInstance.post("/projects", json.toString());
+
+        JSONObject response = TodoInstance.send("GET", "/projects");
+        assertEquals(2,response.getJSONArray("projects").length());
+    }
+
+    @Test
+    public void testCreateTasksOfProjects() throws IOException {
+        JSONObject json = new JSONObject();
+        json.put("id", "1");
+        TodoInstance.post("/projects/1/tasks", json.toString());
+
+        JSONObject response = TodoInstance.send("GET", "/projects/1/tasks");
+        assertEquals(1,response.getJSONArray("todos").length());
+    }
+
+    @Test
+    public void testCreateCategoriesOfProjects() throws IOException {
+        JSONObject json = new JSONObject();
+        json.put("id", "1");
+        TodoInstance.post("/projects/1/categories", json.toString());
+
+        JSONObject response = TodoInstance.send("GET", "/projects/1/categories");
+        assertEquals(1,response.getJSONArray("categories").length());
     }
 
     //POST projects/id
@@ -339,7 +359,8 @@ public class TestProjects {
         String valid_task = "/projects/1/tasks/1";
         TodoInstance.send("DELETE",valid_task);
         JSONObject response = TodoInstance.send("GET","/projects/1/tasks");
-        //todo: ASSERT NEEDED HERE
+        response.getJSONArray("todos").getJSONObject(0).getJSONArray("tasksof");
+        assertEquals(1, response.length());
     }
 
     @Test

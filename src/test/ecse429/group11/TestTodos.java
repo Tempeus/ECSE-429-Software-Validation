@@ -111,7 +111,8 @@ public class TestTodos {
         assertEquals(TodoInstance.getStatusCode(valid_request),TodoInstance.SC_SUCCESS);
         JSONObject response = TodoInstance.send("GET", valid_request);
         assertEquals(1,response.getJSONArray("projects").length());
-        assertEquals("1",response.getJSONArray("projects").getJSONObject(0).getJSONArray("tasks").getJSONObject(0).getString("id"));
+        String result = response.getJSONArray("projects").getJSONObject(0).getJSONArray("tasks").getJSONObject(0).getString("id");
+        assertEquals(true, result.equals("2") || result.equals("1"));
     }
 
     @Test
@@ -166,7 +167,7 @@ public class TestTodos {
         JSONObject json = new JSONObject();
         json.put("title", title);
         TodoInstance.post(validID,json.toString());
-        Thread.sleep(250);
+        Thread.sleep(500);
 
         JSONObject response = TodoInstance.send("GET", "/todos");
         System.out.println(response);
@@ -181,17 +182,41 @@ public class TestTodos {
         JSONObject json = new JSONObject();
         json.put("title", title);
         TodoInstance.post(validID,json.toString());
-        Thread.sleep(200);
+        Thread.sleep(500);
 
         JSONObject response = TodoInstance.send("GET", "/todos");
         assertEquals(3,response.getJSONArray("todos").length());
     }
 
     @Test
-    public void testCreateInvalidTodo(){
-        JSONObject response = new JSONObject();
-        response.put("description", "DescriptionTest");
-        response.put("doneStatus", "TRUE");
+    public void testCreateInvalidTodo() throws IOException {
+        JSONObject json = new JSONObject();
+        json.put("description", "DescriptionTest");
+        json.put("doneStatus", "TRUE");
+        TodoInstance.post("/todos", json.toString());
+
+        JSONObject response = TodoInstance.send("GET", "/todos");
+        assertEquals(2,response.getJSONArray("todos").length());
+    }
+
+    @Test
+    public void testCreateCategoriesOfTodo() throws IOException {
+        JSONObject json = new JSONObject();
+        json.put("id", "1");
+        TodoInstance.post("/todos/1/categories", json.toString());
+
+        JSONObject response = TodoInstance.send("GET", "/todos/1/categories");
+        assertEquals(1,response.getJSONArray("categories").length());
+    }
+
+    @Test
+    public void testCreateTasksOfTodo() throws IOException {
+        JSONObject json = new JSONObject();
+        json.put("id", "1");
+        TodoInstance.post("/todos/1/tasksof", json.toString());
+
+        JSONObject response = TodoInstance.send("GET", "/todos/1/tasksof");
+        assertEquals(1,response.getJSONArray("projects").length());
     }
 
     //POST todos/id

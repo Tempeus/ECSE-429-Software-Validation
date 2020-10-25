@@ -125,12 +125,12 @@ public class TodoInstance {
         return http.getResponseCode();
     }
 
-    public static void main(String[] args) throws IOException {
-
-        JSONObject test = new JSONObject();
-        test.put("title", "test1");
-        test.put("doneStatus", true);
-
-        TodoInstance.post("/todos",test.toString());
-    }
+//    public static void main(String[] args) throws IOException {
+//
+//        JSONObject test = new JSONObject();
+//        test.put("title", "test1");
+//        test.put("doneStatus", true);
+//
+//        TodoInstance.post("/todos",test.toString());
+//    }
 }

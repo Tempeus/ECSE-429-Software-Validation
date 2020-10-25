@@ -1,6 +1,5 @@
 package ecse429.group11;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
@@ -73,18 +72,31 @@ public class TestCategories {
     }
 
     @Test
-    public void testGetProjectsOfCategories(){
-
+    public void testGetProjectsOfCategories() throws IOException {
+        String valid_request = "/categories/1/projects";
+        assertEquals(TodoInstance.getStatusCode(valid_request),TodoInstance.SC_SUCCESS);
+        JSONObject response = TodoInstance.send("GET", valid_request);
+        assertEquals(0,response.getJSONArray("projects").length());
     }
 
     @Test
-    public void testGetInvalidProjectOfCategories(){
-
+    public void testGetInvalidProjectOfCategories() throws IOException {
+        String invalid_request = "/categories/1/projects/1";
+        assertEquals(TodoInstance.getStatusCode(invalid_request), TodoInstance.SC_NOT_FOUND);
     }
 
     @Test
-    public void testGetTodoOfCategories(){
+    public void testGetTodoOfCategories() throws IOException {
+        String valid_request = "/categories/1/todos";
+        assertEquals(TodoInstance.getStatusCode(valid_request),TodoInstance.SC_SUCCESS);
+        JSONObject response = TodoInstance.send("GET", valid_request);
+        assertEquals(0,response.getJSONArray("todos").length());
+    }
 
+    @Test
+    public void testGetInvalidTodoOfCategories() throws IOException {
+        String invalid_request = "/categories/1/todos/1";
+        assertEquals(TodoInstance.getStatusCode(invalid_request), TodoInstance.SC_NOT_FOUND);
     }
 
 
@@ -137,9 +149,35 @@ public class TestCategories {
     }
 
     @Test
-    public void testCreateInvalidCategories(){
-        //Todo: implement
+    public void testCreateInvalidCategories() throws IOException {
+        JSONObject json = new JSONObject();
+        json.put("description", "DescriptionTest");
+        TodoInstance.post("/categories", json.toString());
+
+        JSONObject response = TodoInstance.send("GET", "/categories");
+        assertEquals(2,response.getJSONArray("categories").length());
     }
+
+    @Test
+    public void testCreateTodoOfCategories() throws IOException {
+        JSONObject json = new JSONObject();
+        json.put("id", "1");
+        TodoInstance.post("/categories/1/todos", json.toString());
+
+        JSONObject response = TodoInstance.send("GET", "/categories/1/todos");
+        assertEquals(1,response.getJSONArray("todos").length());
+    }
+
+    @Test
+    public void testCreateProjectsOfCategories() throws IOException {
+        JSONObject json = new JSONObject();
+        json.put("id", "1");
+        TodoInstance.post("/categories/1/projects", json.toString());
+
+        JSONObject response = TodoInstance.send("GET", "/categories/1/projects");
+        assertEquals(1,response.getJSONArray("projects").length());
+    }
+
 
     //POST categories/id
     @Test
@@ -227,8 +265,12 @@ public class TestCategories {
     }
 
     @Test
-    public void testDeleteProjectsOfCategories(){
-
+    public void testDeleteProjectsOfCategories() throws IOException {
+        String valid_task = "/projects/1/tasks/1";
+        TodoInstance.send("DELETE",valid_task);
+        JSONObject response = TodoInstance.send("GET","/projects/1/tasks");
+        response.getJSONArray("todos").getJSONObject(0).getJSONArray("tasksof");
+        assertEquals(1, response.length());
     }
 
     @Test
@@ -239,8 +281,12 @@ public class TestCategories {
     }
 
     @Test
-    public void testDeleteTodosOfCategories(){
-
+    public void testDeleteTodosOfCategories() throws IOException {
+        String valid_task = "/categories/1/todos/1";
+        TodoInstance.send("DELETE",valid_task);
+        JSONObject response = TodoInstance.send("GET","/projects/1/tasks");
+        response.getJSONArray("todos").getJSONObject(0).getJSONArray("tasksof");
+        assertEquals(1, response.length());
     }
 
     @Test
