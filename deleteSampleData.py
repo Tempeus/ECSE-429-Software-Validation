@@ -8,7 +8,7 @@ todos = requests.get(url=URL + "/todos")
 projects = requests.get(url=URL + "/projects")
 categories = requests.get(url=URL + "/categories")
 
-#print(len(r.json().get("todos")))
+# print(len(r.json().get("todos")))
 sizeTodos = len(todos.json().get("todos"))
 sizeProjects = len(projects.json().get("projects"))
 sizeCategories = len(categories.json().get("categories"))
@@ -35,7 +35,7 @@ print()
 
 for i in range(1, sizeProjects//2 + 1):
     requests.delete(url=URL + "/projects/" + str(i))
-    
+
 projects = requests.get(url=URL + "/projects")
 print(projects.json())
 print()

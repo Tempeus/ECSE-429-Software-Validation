@@ -1,4 +1,4 @@
-# ECSE-429-Software-Validatio
+# ECSE-429-Software-Validation
 
 #How to run script tests
 

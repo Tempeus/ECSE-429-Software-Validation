@@ -18,7 +18,7 @@ sizeProjects = len(projects.json().get("projects"))
 sizeCategories = len(categories.json().get("categories"))
 
 # POST /todos/:id
-print("===================POST /todo/:id=======================")
+print("===================POST /todos/:id=======================")
 
 todosJson = todos.json().get("todos")
 for i in range(sizeTodos):
