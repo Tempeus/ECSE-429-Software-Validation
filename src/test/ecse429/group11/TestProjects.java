@@ -144,30 +144,33 @@ public class TestProjects {
     }
 
     @Test
-    public void testCreateWithoutTitle() throws IOException {
+    public void testCreateWithoutTitle() throws IOException, InterruptedException {
         JSONObject json = new JSONObject();
         json.put("description", "DescriptionTest");
         TodoInstance.post("/projects", json.toString());
+        Thread.sleep(500);
 
         JSONObject response = TodoInstance.send("GET", "/projects");
         assertEquals(2,response.getJSONArray("projects").length());
     }
 
     @Test
-    public void testCreateTasksOfProjects() throws IOException {
+    public void testCreateTasksOfProjects() throws IOException, InterruptedException {
         JSONObject json = new JSONObject();
         json.put("id", "1");
         TodoInstance.post("/projects/1/tasks", json.toString());
+        Thread.sleep(500);
 
         JSONObject response = TodoInstance.send("GET", "/projects/1/tasks");
-        assertEquals(1,response.getJSONArray("todos").length());
+        assertEquals(2,response.getJSONArray("todos").length());
     }
 
     @Test
-    public void testCreateCategoriesOfProjects() throws IOException {
+    public void testCreateCategoriesOfProjects() throws IOException, InterruptedException {
         JSONObject json = new JSONObject();
         json.put("id", "1");
         TodoInstance.post("/projects/1/categories", json.toString());
+        Thread.sleep(500);
 
         JSONObject response = TodoInstance.send("GET", "/projects/1/categories");
         assertEquals(1,response.getJSONArray("categories").length());
@@ -371,16 +374,19 @@ public class TestProjects {
     }
 
     @Test
-    public void testDeleteCategoriesOfProjects() throws IOException {
+    public void testDeleteCategoriesOfProjects() throws IOException, InterruptedException {
         //Need to create a link categories
         JSONObject json = new JSONObject();
         json.put("id", "1");
         TodoInstance.post("/projects/1/categories", json.toString());
+        Thread.sleep(500);
 
         JSONObject response = TodoInstance.send("GET", "/projects/1/categories");
         assertEquals(1,response.getJSONArray("categories").length());
+        Thread.sleep(500);
         String valid_task = "/projects/1/categories/1";
         TodoInstance.send("DELETE",valid_task);
+        Thread.sleep(500);
         response = TodoInstance.send("GET","/projects/1/categories");
         assertEquals(0, response.getJSONArray("categories").length());
     }
