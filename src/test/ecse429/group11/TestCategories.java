@@ -38,7 +38,7 @@ public class TestCategories {
         String categories_url = "/categories";
         JSONObject response = TodoInstance.send("GET", categories_url);
         String result = response.getJSONArray("categories").getJSONObject(0).getString("title");
-        assertEquals("Office", result);
+        assertEquals(result.equals("Office") || result.equals("Home"), true);
     }
 
     @Test
@@ -159,20 +159,22 @@ public class TestCategories {
     }
 
     @Test
-    public void testCreateTodoOfCategories() throws IOException {
+    public void testCreateTodoOfCategories() throws IOException, InterruptedException {
         JSONObject json = new JSONObject();
         json.put("id", "1");
         TodoInstance.post("/categories/1/todos", json.toString());
+        Thread.sleep(500);
 
         JSONObject response = TodoInstance.send("GET", "/categories/1/todos");
         assertEquals(1,response.getJSONArray("todos").length());
     }
 
     @Test
-    public void testCreateProjectsOfCategories() throws IOException {
+    public void testCreateProjectsOfCategories() throws IOException, InterruptedException {
         JSONObject json = new JSONObject();
         json.put("id", "1");
         TodoInstance.post("/categories/1/projects", json.toString());
+        Thread.sleep(500);
 
         JSONObject response = TodoInstance.send("GET", "/categories/1/projects");
         assertEquals(1,response.getJSONArray("projects").length());
