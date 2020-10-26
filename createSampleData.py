@@ -14,37 +14,34 @@ someTodos = ["read"
              "write pt1", "write pt2",
              "test pt1", "test pt2"]
 
-print("=======================================================")             
+print("==========================PROJECTS=============================")             
 
 for i in range(len(someProjects)):
     projectData = {"title": someProjects[i]}
     r = requests.post(url=URL + "/projects", json=projectData)
     print(r.json())
 
-print("=======================================================")
+print("==========================CATEGORIES=============================")
 
 for i in range(len(someCategories)):
     categoryData = {"title": someCategories[i]}
     r = requests.post(url=URL + "/categories", json=categoryData)
     print(r.json())
 
-print("=======================================================")
+print("==========================TODOS=============================")
 
 for i in range(len(someTodos)):
     todosData = {"title": someTodos[i]}
     r = requests.post(url=URL + "/todos", json=todosData)
     print(r.json())
 
-print("=======================================================")
+print("==========================CREATING RELATIONSHIP BETWEEN TODOS CATEGORIES AND PROJECTS=============================")
 
 for i in range(len(someProjects)):
     for j in range(random.randint(0, len(someCategories))):
         categoryData = {"id": str(random.randint(2, len(someCategories)))}
         r = requests.post(url=URL + "/projects/" + str(i+1) +
                           "/categories", json=categoryData)
-        print(r.json())
-
-print("=======================================================")
 
 for i in range(len(someProjects)):
     for j in range(random.randint(0, random.randint(0, len(someTodos)))):
