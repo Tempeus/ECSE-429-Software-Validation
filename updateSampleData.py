@@ -17,18 +17,6 @@ sizeTodos = len(todos.json().get("todos"))
 sizeProjects = len(projects.json().get("projects"))
 sizeCategories = len(categories.json().get("categories"))
 
-# POST /todos/:id
-print("===================POST /todos/:id=======================")
-
-todosJson = todos.json().get("todos")
-for i in range(sizeTodos):
-    todosID = todosJson[i].get("id")
-    todosData = {"description": "POST ammend " +
-                 todosJson[i].get("title") + ". ID#: " + todosID}
-    r = requests.post(url=URL + "/todos/" + todosID, json=todosData)
-
-todos = requests.get(url=URL + "/todos")
-print(todos.json())
 print("====================PUT /todos/:id======================")
 
 todos = requests.get(url=URL + "/todos")
@@ -43,6 +31,20 @@ for i in range(sizeTodos):
 
 todos = requests.get(url=URL + "/todos")
 print(todos.json())
+
+# POST /todos/:id
+print("===================POST /todos/:id=======================")
+
+todosJson = todos.json().get("todos")
+for i in range(sizeTodos):
+    todosID = todosJson[i].get("id")
+    todosData = {"description": "POST ammend " +
+                 todosJson[i].get("title") + ". ID#: " + todosID}
+    r = requests.post(url=URL + "/todos/" + todosID, json=todosData)
+
+todos = requests.get(url=URL + "/todos")
+print(todos.json())
+
 print("====================POST /todos/:id/categories======================")
 
 

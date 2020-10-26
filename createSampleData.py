@@ -41,3 +41,7 @@ for i in range(len(someProjects)):
         todosData = {"id": str(random.randint(2, len(someTodos)))}
         r = requests.post(url=URL + "/projects/" +
                           str(i+1) + "/tasks", json=todosData)
+
+print("==============NEW PROJECTS=============")
+r = requests.get(url=URL + "/projects")
+print(r.json())
