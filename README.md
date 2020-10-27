@@ -1,6 +1,10 @@
 # ECSE-429-Software-Validation
 
-#How to run script tests
+All exploratory testing charter and the report can be found in the docs folder.
+
+All the Python scripts for testing the capability of the application can be found under the pyscript folder.
+
+##How to run script tests
 
 1.Create sample data <br />
 `createSampleData.py` 

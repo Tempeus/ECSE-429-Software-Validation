@@ -19,9 +19,11 @@ sizeCategories = len(categories.json().get("categories"))
 
 print("====================PUT /todos/:id======================")
 
+# PUT /todos/:id
+
 todos = requests.get(url=URL + "/todos")
 todosJson = todos.json().get("todos")
-# PUT /todos/:id
+
 sizeTodos = len(todos.json().get("todos"))
 for i in range(sizeTodos):
     todosID = todosJson[i].get("id")
@@ -32,8 +34,9 @@ for i in range(sizeTodos):
 todos = requests.get(url=URL + "/todos")
 print(todos.json())
 
-# POST /todos/:id
 print("===================POST /todos/:id=======================")
+
+# POST /todos/:id
 
 todosJson = todos.json().get("todos")
 for i in range(sizeTodos):
@@ -47,10 +50,10 @@ print(todos.json())
 
 print("====================POST /todos/:id/categories======================")
 
+# POST /todos/:id/categories
 
 categories = requests.get(url=URL + "/categories")
 categoriesJson = categories.json().get("categories")
-# POST /todos/:id/categories
 todosJson = todos.json().get("todos")
 sizeTodos = len(todos.json().get("todos"))
 for i in range(sizeTodos):
@@ -83,10 +86,11 @@ todos = requests.get(url=URL + "/todos")
 print(todos.json())
 print("====================POST /todos/:id/taskof======================")
 
+# POST /todos/:id/projects
 
 projects = requests.get(url=URL + "/projects")
 projectsJson = projects.json().get("projects")
-# POST /todos/:id/projects
+
 todos = requests.get(url=URL + "/todos")
 todosJson = todos.json().get("todos")
 sizeTodos = len(todos.json().get("todos"))
@@ -103,6 +107,7 @@ todos = requests.get(url=URL + "/todos")
 print(todos.json())
 
 print("====================DELETE /todos/:id/projects/:id======================")
+
 # DELETE /todos/:id/projects/:id
 # if has project DELETE first projects of task
 projects = requests.get(url=URL + "/projects")
@@ -122,6 +127,7 @@ print(todos.json())
 
 
 print("===================POST /projects/:id=======================")
+
 # POST /projects/:id
 projects = requests.get(url=URL + "/projects")
 projectsJson = projects.json().get("projects")
@@ -138,6 +144,7 @@ projects = requests.get(url=URL + "/projects")
 print(projects.json())
 
 print("===================PUT /projects/:id=======================")
+
 # PUT /projects/:id
 projects = requests.get(url=URL + "/projects")
 projectsJson = projects.json().get("projects")
@@ -235,6 +242,7 @@ projects = requests.get(url=URL + "/projects")
 print(projects.json())
 
 print("===================PUT /categories/:id=======================")
+
 # POST /projects/:id
 categories = requests.get(url=URL + "/categories")
 categoriesJson = categories.json().get("categories")
@@ -251,6 +259,7 @@ categories = requests.get(url=URL + "/categories")
 print(categories.json())
 
 print("===================PUT /categories/:id=======================")
+
 # PUT /categories/:id
 categories = requests.get(url=URL + "/categories")
 categoriesJson = categories.json().get("categories")
@@ -267,6 +276,7 @@ categories = requests.get(url=URL + "/categories")
 print(categories.json())
 
 print("===================POST /categories/:id=======================")
+
 # POST /categories/:id
 categories = requests.get(url=URL + "/categories")
 categoriesJson = categories.json().get("categories")
