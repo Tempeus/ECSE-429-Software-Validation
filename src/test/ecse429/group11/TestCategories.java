@@ -3,13 +3,17 @@ package ecse429.group11;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
+@FixMethodOrder(MethodSorters.JVM)
 public class TestCategories {
+
 
     @Before
     public void startInstance(){
@@ -47,6 +51,11 @@ public class TestCategories {
         JSONObject response = TodoInstance.send("GET", categories_url);
         String result = response.getJSONArray("categories").getJSONObject(0).getString("description");
         assertEquals("", result);
+    }
+
+    @Test
+    public void testForwardSlashInstability() throws IOException {
+        assertEquals(TodoInstance.SC_NOT_FOUND, TodoInstance.getStatusCode("/todos/"));
     }
 
     //GET categories/id
