@@ -22,11 +22,11 @@ Feature: a student, I query all incomplete HIGH priority tasks from all my class
 
     Examples:
       | amount | title        | doneStatus | priority |
-      | 1      | FinalProject | false      | HIGH     |
-      | 2      | Assignment1  | false      | HIGH     |
-      | 3      | Quiz1        | false      | HIGH     |
+      | 1      | FinalProject | false      | LOW      |
+      | 2      | Assignment1  | false      | MEDIUM   |
+      | 3      | Quiz1        | false      | LOW      |
 
-  Scenario Outline: categorize a non-existing task with a priority (Error Flow)
+  Scenario Outline: query priority with no existing tasks (Error Flow)
     Given no todos with priority "<priority>"
     When the user queries all tasks with done status "<doneStatus>" and priority "<priority>"
     Then <amount> tasks with done status "<doneStatus>" and priority "<priority>" will be returned.
