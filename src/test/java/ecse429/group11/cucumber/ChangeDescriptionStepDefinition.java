@@ -5,19 +5,27 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 
 public class ChangeDescriptionStepDefinition {
-    @Given("{string} is the description of the task")
-    public void isTheDescriptionOfTheTask(String arg0) {
+    @Given("{string} is the new description of the task")
+    public void isTheNewDescriptionOfTheTask(String arg0) {
     }
 
-    @Then("the task description will be changed to <description>")
-    public void theTaskDescriptionWillBeChangedToDescription() {
+    @And("<taskid> is the given title id to be changed")
+    public void taskidIsTheGivenTitleIdToBeChanged() {
     }
 
-    @And("task is non-existent")
-    public void taskIsNonExistent() {
+    @Then("the task description will be changed to {string}")
+    public void theTaskDescriptionWillBeChangedTo(String arg0) {
     }
 
-    @Then("an error {int} message will be displayed")
-    public void anErrorMessageWillBeDisplayed(int arg0) {
+    @And("is related to projects with id <tasksofid>")
+    public void isRelatedToProjectsWithIdTasksofid() {
+    }
+
+    @And("<taskid> is the given id of the non-existent task")
+    public void taskidIsTheGivenIdOfTheNonExistentTask() {
+    }
+
+    @Then("a {string} error message {int} will be displayed")
+    public void aErrorMessageWillBeDisplayed(String arg0, int arg1) {
     }
 }

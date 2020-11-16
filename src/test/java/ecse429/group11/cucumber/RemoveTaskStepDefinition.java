@@ -17,12 +17,8 @@ public class RemoveTaskStepDefinition {
     public void theToDoListWillNoLongerHaveTheTask() {
     }
 
-    @And("<todolistid> is the id of the non-existent to do list")
-    public void todolistidIsTheIdOfTheNonExistentToDoList() {
-    }
-
-    @Then("a {int} error message will be displayed")
-    public void aErrorMessageWillBeDisplayed(int arg0) {
+    @And("<categoryid> is the id of the task category")
+    public void categoryidIsTheIdOfTheTaskCategory() {
     }
 
     @Given("{string} is the id of the non-existent task")
@@ -31,5 +27,9 @@ public class RemoveTaskStepDefinition {
 
     @And("{string} is the id of the to do list")
     public void isTheIdOfTheToDoList(String arg0) {
+    }
+
+    @Then("a {string} error {int} message will be displayed")
+    public void aErrorMessageWillBeDisplayed(String arg0, int arg1) {
     }
 }

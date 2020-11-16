@@ -10,26 +10,30 @@ Feature: a student, I remove an unnecessary task from my course to do list, so I
     Then the to do list will no longer have the task
 
     Examples:
-      | todolistid   | taskid         |
+      | taskid        | todolistid    |
       | 1            | 1              |
-      | 1            |                |
+      | 2            |   2             |
 
-  Scenario Outline: Remove a task from a non-existent my course to do list (Error Flow)
+  Scenario Outline: Remove a task that has a category from a course to do list(Alternative Flow)
     Given <taskid> is the id of the task
-    And <todolistid> is the id of the non-existent to do list
+    And <todolistid> is the id of the to do list
+    And <categoryid> is the id of the task category
     When the user posts a request to the server
-    Then a 404 error message will be displayed
+    Then the to do list will no longer have the task
+    Then the to do list will no longer have the task
 
     Examples:
-      | todolistid  | taskid  | Error Message|
-      | 2           | 1       | 404          |
+      | taskid       | todolistid      | categoryid |
+      | 1            | 1               | 1          |
+      | 2            |   1             |  1          |
 
 
-  Scenario Outline: Remove a non-existent task from my course to do list (Normal Flow)
+
+  Scenario Outline: Remove a non-existent task from my course to do list (Error Flow)
     Given "<taskid>" is the id of the non-existent task
     And "<todolistid>" is the id of the to do list
     When the user posts a request to the server
-    Then a 404 error message will be displayed
+    Then a "<Error Message>" error 404 message will be displayed
 
     Examples:
       | todolistid  | taskid  | Error Message|
