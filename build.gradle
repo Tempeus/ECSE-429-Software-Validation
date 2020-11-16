@@ -14,7 +14,8 @@ repositories {
     jcenter()
 }
 dependencies {
-	testImplementation 'junit:junit:4.12'
+	implementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
     testImplementation 'org.json:json:20200518'
     testImplementation 'io.cucumber:cucumber-java:6.8.1'
     testImplementation 'io.cucumber:cucumber-junit:6.8.1'

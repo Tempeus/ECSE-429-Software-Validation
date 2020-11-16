@@ -1,6 +1,6 @@
 package java.ecse429.group11.cucumber;
 
-import java.ecse429.group11.restAPI.TodoInstance;
+import ecse429.group11.restAPI.TodoInstance;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -120,7 +120,7 @@ public class CategorizeTaskStepDefinition {
     //Scenario Outline: Error Flow
 
     @When("user request to categorize a todo with title {string} with {string}")
-    public void userRequestToCategorizeATodoWithTitleWith(String fakeTitle, String priority){
+    public void userRequestToCategorizeATodoWithTitleWith(String fakeTitle, String priority) throws IOException {
         json.put("category", priority);
 
         TodoInstance.send("GET", "/todos");
