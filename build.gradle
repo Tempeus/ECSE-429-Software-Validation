@@ -15,7 +15,9 @@ repositories {
 }
 dependencies {
 	testImplementation 'junit:junit:4.12'
+    testImplementation 'org.json:json:20200518'
     testImplementation 'io.cucumber:cucumber-java:6.8.1'
+    testImplementation 'io.cucumber:cucumber-junit:6.8.1'
 }
 
 configurations {
@@ -30,7 +32,7 @@ task cucumber() {
         javaexec {
             main = "io.cucumber.core.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
-            args = ['--plugin', 'pretty', '--glue', 'gradle.cucumber', 'src/test/ecse429/group11/resources']
+            args = ['--plugin', 'pretty', '--glue', 'ecse429.group11.cucumber', 'src/test/ecse429/group11/resources']
         }
     }
 }
