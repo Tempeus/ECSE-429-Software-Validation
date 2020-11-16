@@ -26,9 +26,9 @@ Feature: a student, I mark a task as done on my course to do list, so I can trac
       | Quiz1       | true           | true           |
 
   Scenario Outline: mark a non-existing task as done (Error Flow)
-    Given no todo with id <id> is registered in the API server
-    When the user requests to mark the task <id> with a done status "<doneStatus>"
-    Then system will output an error with error code <errorCode>
+    Given no todo with id "<id>" is registered in the API server
+    When the user requests to mark the task "<id>" with a done status "<doneStatus>"
+    Then system will output an error with error code "<errorCode>"
 
     Examples:
       | id   | doneStatus | errorCode |
