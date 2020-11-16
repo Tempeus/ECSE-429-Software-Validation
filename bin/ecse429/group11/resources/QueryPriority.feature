@@ -1,1 +1,0 @@
-Feature: a student, I query all incomplete HIGH priority tasks from all my classes, to identity my short-term goals.

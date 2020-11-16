@@ -1,1 +1,0 @@
-Feature: a student, I query the incomplete tasks for a class I am taking, tohelp manage my time.
