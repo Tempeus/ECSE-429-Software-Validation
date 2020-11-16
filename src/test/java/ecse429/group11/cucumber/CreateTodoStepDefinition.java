@@ -1,6 +1,6 @@
 package ecse429.group11.cucumber;
 
-import java.ecse429.group11.restAPI.TodoInstance;
+import ecse429.group11.restAPI.TodoInstance;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -65,8 +65,7 @@ public class CreateTodoStepDefinition {
             error = true;
         }
 
-        //todo: get the title instead of the length
-        assertEquals(3,response.getJSONArray("todos").length());
+        assertEquals(title,response.getJSONArray("todos").getJSONObject(2).getString("title"));
         assertEquals(false, error);
     }
 
@@ -82,8 +81,7 @@ public class CreateTodoStepDefinition {
             error = true;
         }
 
-        //todo: get the title instead of the length
-        assertEquals(3,response.getJSONArray("todos").length());
+        assertEquals(title,response.getJSONArray("todos").getJSONObject(2).getString("title"));
         assertEquals(false, error);
     }
 

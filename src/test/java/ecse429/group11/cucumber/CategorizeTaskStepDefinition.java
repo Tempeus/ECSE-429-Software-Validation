@@ -1,6 +1,6 @@
 package ecse429.group11.cucumber;
 
-import java.ecse429.group11.restAPI.TodoInstance;
+import ecse429.group11.restAPI.TodoInstance;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -48,13 +48,8 @@ public class CategorizeTaskStepDefinition {
 
     @When("the user requests to give the task {string} with a priority {string}")
     public void theUserRequestsToGiveTheTaskWithAPriority(String title, String priority){
-        try {
-            JSONObject todos = TodoInstance.send("GET","/todos");
-        } catch (IOException e) {
-            error = true;
-        }
-        //todo: Get the todo by name and id and set it as the local variable
-        todoID = 0;
+
+        todoID = 3; //ID is 3 since there already exists two todos by default
         json.put("categories", priority);
 
     }
@@ -66,8 +61,21 @@ public class CategorizeTaskStepDefinition {
         } catch (IOException e) {
             error = true;
         }
-        //todo add assert
 
+        JSONObject response = null;
+        try {
+            response = TodoInstance.send("GET", "/todos?title=" + title);
+        } catch (IOException e) {
+            error = false;
+        }
+
+        String taskName = response.getJSONArray("todos").getJSONObject(0).getString("title");
+
+        String TaskCategoryResult = response.getJSONArray("todos").getJSONObject(0).getString("categories");
+
+        assertEquals(priority, TaskCategoryResult);
+        assertEquals(title, taskName);
+        assertEquals(false, error);
     }
 
     //Scenario Outline: Alternative Flow
@@ -96,14 +104,8 @@ public class CategorizeTaskStepDefinition {
 
     @When("user request to update the category of {string} to {string}")
     public void userRequestToUpdateTheCategoryOfFromTo(String title, String newPriority){
-        try {
-            JSONObject todos = TodoInstance.send("GET","/todos");
-        } catch (IOException e) {
-            error = true;
-        }
 
-        //todo: Get the todo by name and id and set it as the local variable
-        todoID = 0;
+        todoID = 3; //ID is 3 since there already exists two todos by default
         json.put("categories", newPriority);
     }
 
@@ -114,7 +116,22 @@ public class CategorizeTaskStepDefinition {
         } catch (IOException e) {
             error = true;
         }
-        //todo add assert
+
+        JSONObject response = null;
+        try {
+            response = TodoInstance.send("GET", "/todos?title=" + title);
+        } catch (IOException e) {
+            error = false;
+        }
+
+        String taskName = response.getJSONArray("todos").getJSONObject(0).getString("title");
+
+        String TaskCategoryResult = response.getJSONArray("todos").getJSONObject(0).getString("categories");
+
+        assertEquals(newPriority, TaskCategoryResult);
+        assertEquals(title, taskName);
+        assertEquals(false, error);
+
     }
 
     //Scenario Outline: Error Flow
@@ -122,11 +139,19 @@ public class CategorizeTaskStepDefinition {
     @When("user request to categorize a todo with title {string} with {string}")
     public void userRequestToCategorizeATodoWithTitleWith(String fakeTitle, String priority){
         json.put("category", priority);
+        JSONObject response = null;
+        try {
+            response = TodoInstance.send("GET", "/todos");
+        } catch (IOException e) {
+            error = true;
+        }
 
-        TodoInstance.send("GET", "/todos");
+        String todoTitle = response.getJSONArray("todos").getJSONObject(2).getString("title");
 
-        //todo: Find the fake Title in the Array, realize you cant, using while loop
-        error = true;
+        if(!todoTitle.equals(fakeTitle))
+            error = true;
+        else
+            error = false;
     }
 
     @Then("system will output an error")
