@@ -16,12 +16,6 @@ public class ChangeDescriptionStepDefinition {
     public static JSONObject json = null;
     public static boolean error = false;
 
-    @Given("the Todo API server is running")
-    public void the_Todo_API_server_is_running(){
-        java.ecse429.group11.restAPI.TodoInstance.runApplication();
-        json = new JSONObject();
-    }
-
     @Given("{string} is the new description of the task")
     public void isTheNewDescriptionOfTheTask(String arg0) {
         json.put("description", arg0);
@@ -36,7 +30,7 @@ public class ChangeDescriptionStepDefinition {
     public void theUserPostsADescriptionRequestToTheServer(){
         String validID = "/todos/" + json.get("taskid").toString();
         try {
-            java.ecse429.group11.restAPI.TodoInstance.post(validID,json.get("description").toString());
+            ecse429.group11.restAPI.TodoInstance.post(validID,json.get("description").toString());
         } catch (IOException e) {
             error = true;
         }
@@ -51,7 +45,7 @@ public class ChangeDescriptionStepDefinition {
     public void theTaskDescriptionWillBeChangedTo(String arg0) {
         JSONObject response = null;
         try {
-            response = java.ecse429.group11.restAPI.TodoInstance.send("GET", "/todos/" + json.get("id").toString() );
+            response = ecse429.group11.restAPI.TodoInstance.send("GET", "/todos/" + json.get("id").toString() );
         } catch (IOException e) {
             error = true;
         }
@@ -76,7 +70,7 @@ public class ChangeDescriptionStepDefinition {
         JSONObject response = null;
 
         try {
-            response = java.ecse429.group11.restAPI.TodoInstance.send("GET", "/todos");
+            response = ecse429.group11.restAPI.TodoInstance.send("GET", "/todos");
         } catch (IOException e) {
             error = true;
         }
@@ -86,7 +80,7 @@ public class ChangeDescriptionStepDefinition {
 
     @After
     public void shutdown(){
-        java.ecse429.group11.restAPI.TodoInstance.killInstance();
+        ecse429.group11.restAPI.TodoInstance.killInstance();
         error = false;
     }
 }

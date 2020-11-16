@@ -23,26 +23,11 @@ public class RemoveTaskStepDefinition {
         json.put("todolistid", arg0);
     }
 
-    @When("the user posts a request to the server")
-    public void theUserPostsADeleteTaskRequestToTheServer(){
-        String validID = "/projects/" + json.get("todolistid").toString();
-        try {
-            java.ecse429.group11.restAPI.TodoInstance.delete(validID,json.get("taskid").toString());
-        } catch (IOException e) {
-            error = true;
-        }
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Then("the to do list will no longer have the task")
     public void theToDoListWillNoLongerHaveTheTask() {
         String validID = "/todos";
         try {
-            java.ecse429.group11.restAPI.TodoInstance.post(validID,json.toString());
+            ecse429.group11.restAPI.TodoInstance.post(validID,json.toString());
         } catch (IOException e) {
             error = true;
         }
