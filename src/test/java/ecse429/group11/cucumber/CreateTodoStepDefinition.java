@@ -28,11 +28,6 @@ public class CreateTodoStepDefinition {
         json.put("title", title);
     }
 
-    @And("{string} is the done status of the class")
-    public void isTheDoneStatusOfTheClass(String doneStatus){
-        json.put("doneStatus", doneStatus);
-    }
-
     @And("{string} is the description of the class")
     public void isTheDescriptionOfTheClass(String description){
         json.put("description", description);
