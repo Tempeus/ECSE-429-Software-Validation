@@ -15,7 +15,7 @@ Feature: a student, I categorize tasks as HIGH, MEDIUM or LOW priority, so I can
     | MATH240 | false       | Homework        | MEDIUM    |
     | COMP551 | false       | Project work    | LOW       |
 
-  Scenario Outline: change the priority category of a task (Another Flow)
+  Scenario Outline: change the priority category of a task (Alternative Flow)
     Given a todo with the title "<title>", done status "<doneStatus>", description "<description>" and category "<priority>"
     When user request to update the category of "<title>" from "<priority>" to "<newPriority>"
     Then  task "<title>" will be assigned with a new category of "<newPriority>"
