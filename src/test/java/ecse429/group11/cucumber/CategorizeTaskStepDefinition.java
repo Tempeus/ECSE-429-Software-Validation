@@ -137,7 +137,7 @@ public class CategorizeTaskStepDefinition {
     //Scenario Outline: Error Flow
 
     @When("user request to categorize a todo with title {string} with {string}")
-    public void userRequestToCategorizeATodoWithTitleWith(String fakeTitle, String priority){
+    public void userRequestToCategorizeATodoWithTitleWith(String fakeTitle, String priority) throws IOException {
         json.put("category", priority);
         JSONObject response = null;
         try {
