@@ -28,7 +28,7 @@ public class CreateTodoStepDefinition {
         json.put("title", title);
     }
 
-    @And("{string} is the description of the class")
+    @Given("{string} is the description of the class")
     public void isTheDescriptionOfTheClass(String description){
         json.put("description", description);
     }

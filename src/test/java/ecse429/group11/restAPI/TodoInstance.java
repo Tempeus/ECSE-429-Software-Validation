@@ -1,4 +1,4 @@
-package java.ecse429.group11.restAPI;
+package ecse429.group11.restAPI;
 
 import org.json.JSONObject;
 
