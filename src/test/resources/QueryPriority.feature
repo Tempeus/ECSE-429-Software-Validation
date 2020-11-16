@@ -2,12 +2,12 @@ Feature: a student, I query all incomplete HIGH priority tasks from all my class
 
   Background:
     Given the todo manager API server is already running
-    And HIGH, MEDIUM and LOW categories are registered in the todo manager API
+    And HIGH, MEDIUM and LOW categories exist
 
   Scenario Outline: query all incomplete HIGH priority tasks (Normal Flow)
     Given <amount> todos with the title "<title>", done status "<doneStatus>" and priority "<priority>"
     When the user queries all tasks with done status "<doneStatus>" and priority "<priority>"
-    Then <amount> tasks with done status "<doneStatus>" and priority "<priority>" will be returned.
+    Then <amount> tasks with done status "<doneStatus>" and priority "<priority>" will be returned
 
     Examples:
       | amount | title        | doneStatus | priority |
@@ -18,7 +18,7 @@ Feature: a student, I query all incomplete HIGH priority tasks from all my class
   Scenario Outline: query all tasks by done status and priority (Alternative Flow)
     Given <amount> todos with the title "<title>", done status "<doneStatus>" and priority "<priority>"
     When the user queries all tasks with done status "<doneStatus>" and priority "<priority>"
-    Then <amount> tasks with done status "<doneStatus>" and priority "<priority>" will be returned.
+    Then <amount> tasks with done status "<doneStatus>" and priority "<priority>" will be returned
 
     Examples:
       | amount | title        | doneStatus | priority |
@@ -29,7 +29,7 @@ Feature: a student, I query all incomplete HIGH priority tasks from all my class
   Scenario Outline: query priority with no existing tasks (Error Flow)
     Given no todos with priority "<priority>"
     When the user queries all tasks with done status "<doneStatus>" and priority "<priority>"
-    Then <amount> tasks with done status "<doneStatus>" and priority "<priority>" will be returned.
+    Then <amount> tasks with done status "<doneStatus>" and priority "<priority>" will be returned
 
     Examples:
       | amount | doneStatus | priority |
