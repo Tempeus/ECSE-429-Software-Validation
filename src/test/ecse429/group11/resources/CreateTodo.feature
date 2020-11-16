@@ -4,9 +4,9 @@ Feature: a student, I create a to do list for a new class I am taking, so I can 
     Given the Todo API server is running
 
     Scenario Outline: Create a new class todo with a title (Normal Flow)
-      Given <title> is the title of the class
+      Given "<title>" is the title of the class
       When the user posts a request to the server
-      Then a todo instance with <title> will be created
+      Then a todo instance with "<title>" will be created
 
       Examples:
         | title   |
@@ -15,11 +15,11 @@ Feature: a student, I create a to do list for a new class I am taking, so I can 
         | MATH240 |
 
     Scenario Outline: Create a new class todo with a title, active status and description (Alternative Flow)
-      Given <title> is the title of the class
-      And <isActive> is the active status of the class
-      And <description> is the description of the class
+      Given "<title>" is the title of the class
+      And "<isActive>" is the active status of the class
+      And "<description>" is the description of the class
       When the user post a request to the server
-      Then a todo instance with <title>, <isActive>, <description> will be created
+      Then a todo instance with "<title>", "<isActive>", "<description>" will be created
 
       Examples:
         | title   | isActive  | description                       |
@@ -29,8 +29,8 @@ Feature: a student, I create a to do list for a new class I am taking, so I can 
 
 
     Scenario Outline: Create a new class todo without a title but has an active status and description (Error flow)
-      Given <isActive> is the active status of the class
-      And <description> is the description of the class
+      Given "<isActive>" is the active status of the class
+      And "<description>" is the description of the class
       When the user post a request to the server
       Then error 404 will occur
 
