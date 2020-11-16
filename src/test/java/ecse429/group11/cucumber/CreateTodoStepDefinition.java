@@ -1,6 +1,6 @@
-package ecse429.group11.cucumber;
+package java.ecse429.group11.cucumber;
 
-import ecse429.group11.restAPI.TodoInstance;
+import java.ecse429.group11.restAPI.TodoInstance;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -26,11 +26,6 @@ public class CreateTodoStepDefinition {
     @Given("{string} is the title of the class")
     public void is_the_title_of_the_class(String title){
         json.put("title", title);
-    }
-
-    @And("{string} is the done status of the class")
-    public void isTheDoneStatusOfTheClass(String doneStatus){
-        json.put("doneStatus", doneStatus);
     }
 
     @And("{string} is the description of the class")
