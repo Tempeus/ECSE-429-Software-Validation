@@ -5,7 +5,7 @@ Feature: a student, I want to change a task description, to better represent the
 
   Scenario Outline: Change a task description (Normal Flow)
     Given "<description>" is the new description of the task
-    And <taskid> is the given title id to be changed
+    And "<taskid>" is the given task id to be changed
     When the user posts a request to the server
     Then the task description will be changed to "<description>"
 
@@ -17,8 +17,8 @@ Feature: a student, I want to change a task description, to better represent the
 
   Scenario Outline: Change a task description that is related to a project (Alternative Flow)
     Given "<description>" is the new description of the task
-    And <taskid> is the given title id to be changed
-    And is related to projects with id <tasksofid>
+    And "<taskid>" is the given task id to be changed
+    And is related to projects with id "<tasksofid>"
     When the user posts a request to the server
     Then the task description will be changed to "<description>"
 
@@ -30,7 +30,7 @@ Feature: a student, I want to change a task description, to better represent the
 
   Scenario Outline: Change a description for a non-existent task (Error Flow)
     Given "<description>" is the new description of the task
-    And <taskid> is the given id of the non-existent task
+    And "<taskid>" is the given id of the non-existent task
     When the user posts a request to the server
     Then a "<Error Message>" error message 404 will be displayed
 

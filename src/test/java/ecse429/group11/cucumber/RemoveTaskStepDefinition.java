@@ -3,30 +3,63 @@ package ecse429.group11.cucumber;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class RemoveTaskStepDefinition {
-    @Given("<taskid> is the id of the task")
-    public void taskidIsTheIdOfTheTask() {
-    }
 
-    @And("<todolistid> is the id of the to do list")
-    public void todolistidIsTheIdOfTheToDoList() {
-    }
+    public static JSONObject json = null;
+    public static boolean error = false;
 
-    @Then("the to do list will no longer have the task")
-    public void theToDoListWillNoLongerHaveTheTask() {
-    }
-
-    @And("<categoryid> is the id of the task category")
-    public void categoryidIsTheIdOfTheTaskCategory() {
-    }
-
-    @Given("{string} is the id of the non-existent task")
-    public void isTheIdOfTheNonExistentTask(String arg0) {
+    @Given("{string} is the id of the task")
+    public void isTheIdOfTheTask(String arg0) {
+        json.put("taskid", arg0);
     }
 
     @And("{string} is the id of the to do list")
     public void isTheIdOfTheToDoList(String arg0) {
+        json.put("todolistid", arg0);
+    }
+
+    @When("the user posts a request to the server")
+    public void theUserPostsADeleteTaskRequestToTheServer(){
+        String validID = "/projects/" + json.get("todolistid").toString();
+        try {
+            java.ecse429.group11.restAPI.TodoInstance.delete(validID,json.get("taskid").toString());
+        } catch (IOException e) {
+            error = true;
+        }
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Then("the to do list will no longer have the task")
+    public void theToDoListWillNoLongerHaveTheTask() {
+        String validID = "/todos";
+        try {
+            java.ecse429.group11.restAPI.TodoInstance.post(validID,json.toString());
+        } catch (IOException e) {
+            error = true;
+        }
+
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @And("{string} is the id of the task category")
+    public void isTheIdOfTheTaskCategory(String arg0) {
+    }
+
+    @Given("{string} is the id of the non-existent task")
+    public void isTheIdOfTheNonExistentTask(String arg0) {
     }
 
     @Then("a {string} error {int} message will be displayed")

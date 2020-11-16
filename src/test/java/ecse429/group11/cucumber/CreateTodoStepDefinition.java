@@ -1,4 +1,4 @@
-package java.ecse429.group11.cucumber;
+package ecse429.group11.cucumber;
 
 import java.ecse429.group11.restAPI.TodoInstance;
 import io.cucumber.java.After;
