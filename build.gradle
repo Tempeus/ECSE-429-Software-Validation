@@ -32,7 +32,7 @@ task cucumber() {
         javaexec {
             main = "io.cucumber.core.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
-            args = ['--plugin', 'pretty', '--glue', 'ecse429.group11.cucumber', 'src/test/ecse429/group11/resources']
+            args = ['--plugin', 'pretty', '--glue', 'ecse429.group11.cucumber', 'src/test/resources']
         }
     }
 }
