@@ -101,6 +101,22 @@ public class TodoInstance {
         return true;
     }
 
+    public static boolean delete(String option, String JSONInputString) throws IOException {
+        URL url = new URL(baseURL + option);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("DELETE");
+        connection.setRequestProperty("Content-Type", "application/json; utf-8");
+        connection.setRequestProperty("Accept", "application/json");
+        connection.setDoOutput(true);
+        byte[] input = JSONInputString.getBytes("utf-8");
+        connection.setFixedLengthStreamingMode(input.length);
+        connection.connect();
+        try(OutputStream os = connection.getOutputStream()) {
+            os.write(input,0,input.length);
+        }
+        return true;
+    }
+
 
     public static String getHeadContentType(String option) throws IOException {
         URL url = new URL(baseURL + option);

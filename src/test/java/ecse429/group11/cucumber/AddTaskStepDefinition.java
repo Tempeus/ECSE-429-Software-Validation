@@ -1,4 +1,4 @@
-package java.ecse429.group11.cucumber;
+package ecse429.group11.cucumber;
 
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
