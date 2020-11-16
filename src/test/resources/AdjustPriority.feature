@@ -35,12 +35,12 @@ Feature: Adjust Priority
       | ECSE429 | HIGH         | HIGH         |
 
   Scenario Outline: Student attempted to change priority of non-existing task (Error Flow)
-    Given the task with id "<task_id>" does not exist
-    When the student changes the task with id "<task_id>" to "<new_priority>" priority
+    Given the task with title "<title>" does not exist
+    When the student changes the task with title "<title>" to "<new_priority>" priority
     Then the system shall inform the user that the task is non-existent
 
     Examples: 
-      | task_id | new_priority |
+      | title   | new_priority |
       | Netflix | LOW          |
       | COMP551 | MEDIUM       |
       | ECSE429 | HIGH         |

@@ -19,7 +19,7 @@ Feature: Add Task
 
   Scenario Outline: Adding a pre-existing task to a todo list (Alternate Flow)
     Given there exists a todo list in the system with title "<listTitle>"
-    When I add a new task with title "<taskTitle>" to the todo list "<listTitle>"
+    When I add a new task with the title "<taskTitle>" to the todo list "<listTitle>"
     Then there will be a new task with title "<taskTitle>" in the todo list "<listTitle>"
 
     Examples: 

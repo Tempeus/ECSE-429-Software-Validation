@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="EclipseModuleManager">
+    <libelement value="jar://$MODULE_DIR$/lib/cucumber-junit-6.9.0.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/json-20200518.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/rest-assured-4.3.1.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/cucumber-core-6.9.0.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/cucumber-java-6.9.0.jar!/" />
+    <src_description expected_position="0">
+      <src_folder value="file://$MODULE_DIR$/src/main" expected_position="0" />
+      <src_folder value="file://$MODULE_DIR$/src/test" expected_position="1" />
+    </src_description>
+  </component>
+</module>
