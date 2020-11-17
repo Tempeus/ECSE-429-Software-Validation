@@ -6,6 +6,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class ChangeDescriptionStepDefinition {
             TodoInstance.post("/todos/" + id, json.toString());
         } else {
             error = "404";
+            System.out.println(error);
         }
 
     }
@@ -71,16 +73,45 @@ public class ChangeDescriptionStepDefinition {
         TodoInstance.post("/todos", json.toString());
     }
 
+    @Then("an error message {string} with {string} will occur")
+    public void anErrorMessage(String arg0, String arg1) throws IOException{
+        try{
+            JSONObject response = TodoInstance.send("GET", "/todos/" + arg1);
+            System.out.println(response.getJSONArray("errorMessages").getJSONObject(0).toString());
+            assertEquals(arg0,true);
+        }
+        catch (Exception e) {
+            //Cannot find id
+            assertEquals(true,true);
+        }
+    }
 
     @After
-    public void shutdown() {
-        TodoInstance.killInstance();
+    public void clear() throws IOException {
+        // Remove all todos.
+        JSONObject response = TodoInstance.send("GET", "/todos");
+        JSONArray array = response.getJSONArray("todos");
+        for (int i=0; i<array.length(); i++){
+            String id = array.getJSONObject(i).getString("id");
+            TodoInstance.send("DELETE", "/todos/" + id);
+        }
+
+        // Remove all projects.
+        response = TodoInstance.send("GET", "/projects");
+        array = response.getJSONArray("projects");
+        for (int i=0; i<array.length(); i++){
+            String id = array.getJSONObject(i).getString("id");
+            TodoInstance.send("DELETE", "/projects/" + id);
+        }
+
+        // Remove all categories.
+        response = TodoInstance.send("GET", "/categories");
+        array = response.getJSONArray("categories");
+        for (int i=0; i<array.length(); i++){
+            String id = array.getJSONObject(i).getString("id");
+            TodoInstance.send("DELETE", "/categories/" + id);
+        }
     }
 
-    @Then("an error message {string}")
-    public void anErrorMessage(String arg0) {
-        assertEquals(arg0, arg0);
-
-    }
 }
 

@@ -6,8 +6,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Test;
 
 import java.io.IOException;
 
@@ -15,73 +15,117 @@ import static org.junit.Assert.assertEquals;
 
 public class RemoveTaskStepDefinition {
 
-    public static JSONObject json = null;
-    public static boolean error = false;
+    String error;
 
-    @Given("{string} is the id of the task")
-    public void isTheIdOfTheTask(String arg0) {
-        json.put("tasktodoid", arg0);
+    @Given("{string} is the title of the task to be removed")
+    public void isTheTitleOfTheTaskToBeRemoved(String arg0) throws IOException {
+        JSONObject json = new JSONObject();
+        json.put("title", arg0);
+        TodoInstance.post("/todos", json.toString());
     }
 
-    @And("{string} is the id of the to do list")
-    public void isTheIdOfTheToDoList(String arg0) {
-        json.put("todolistid", arg0);
+    @And("{string} is the title of the to do list")
+    public void isTheTitleOfTheToDoList(String arg0) throws IOException {
+        JSONObject json = new JSONObject();
+        json.put("title", arg0);
+        TodoInstance.post("/projects", json.toString());
     }
 
-    @When("the user posts a request to the server to remove a task")
-    public void theUserPostsADeleteTaskRequestToTheServer(){
-        String validID = "/projects/" + json.get("todolistid").toString();
-        try {
-            TodoInstance.delete(validID,json.get("tasktodoid").toString());
-        } catch (IOException e) {
-            error = true;
-        }
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+    @When("the user posts a request to the server to remove a task {string} from {string}>")
+    public void theUserPostsARequestToTheServerToRemoveATaskFrom(String arg0, String arg1) throws IOException {
+        JSONObject response = TodoInstance.send("GET", "/todos?title=" + arg0);
 
-    @Then("the to do list will no longer have the task")
-    public void theToDoListWillNoLongerHaveTheTask() {
-        JSONObject response = null;
-        try {
-            response = TodoInstance.send("GET", "/todos/" + json.get("tasktodoid").toString() );
-        } catch (IOException e) {
-            error = true;
+        JSONObject jsonPr = new JSONObject();
+        jsonPr.put("title", arg1);
+
+        JSONObject responsePr = TodoInstance.send("GET", "/projects?title=" + arg1);
+        if (response.getJSONArray("todos").length() != 0 && responsePr.getJSONArray("projects").length() != 0) {
+            String id = response.getJSONArray("todos").getJSONObject(0).getString("id");
+            String idpr = responsePr.getJSONArray("projects").getJSONObject(0).getString("id");
+            JSONObject idjson = new JSONObject();
+            idjson.put("id", id);
+            TodoInstance.post("/todos/" + id, jsonPr.toString());
+            TodoInstance.send("DELETE","/projects/"+idpr+"/tasks/"+id);
+        } else {
+            error = "404";
         }
 
-        assertEquals(null, response.getJSONArray("todos").getJSONObject(0).get("tasksof").toString());
-        assertEquals(false, error);
     }
 
-    @And("{string} is the id of the task category")
-    public void isTheIdOfTheTaskCategory(String arg0) {
-        json.put("categorytaskid", arg0);
-    }
-
-    @Given("{string} is the id of the non-existent task")
-    public void isTheIdOfTheNonExistentTask(String arg0) {
-        json.put("nontaskid", arg0);
-    }
-
-    @Then("a {string} error {int} message will be displayed")
-    public void aErrorMessageWillBeDisplayed(String arg0, int arg1) {
-        JSONObject response = null;
-
+    @Then("the to do {string} list will no longer have the task {string}")
+    public void theToDoListWillNoLongerHaveTheTask(String arg0, String arg1) throws IOException {
+        JSONObject response = TodoInstance.send("GET", "/projects?title=" + arg0);
         try {
-            response = TodoInstance.send("GET", "/todos");
-        } catch (IOException e) {
-            error = true;
+            int length = response.getJSONArray("projects").getJSONObject(0).getJSONArray("tasks").length();
+            assertEquals(false, true);
         }
+        //NO MORE TASKS
+        catch (Exception e) {
+            assertEquals(true,true);
+        }
+    }
 
-        assertEquals(404, arg0);
+    @And("{string} is the id of the task category related to {string}")
+    public void isTheIdOfTheTaskCategory(String arg0, String arg1) throws IOException {
+        JSONObject response = TodoInstance.send("GET", "/todos?title=" + arg1);
+
+        JSONObject jsonCat = new JSONObject();
+        jsonCat.put("title", arg0);
+        TodoInstance.post("/todos", jsonCat.toString());
+        JSONObject responseCat = TodoInstance.send("GET", "/categories?title=" + arg0);
+
+        if (response.getJSONArray("todos").length() != 0 && responseCat.getJSONArray("categories").length() != 0) {
+            String id = response.getJSONArray("todos").getJSONObject(0).getString("id");
+            TodoInstance.post("/todos/" + id, jsonCat.toString());
+        } else {
+            error = "404";
+        }
+    }
+
+    @Then("a {string} error with {string} message will be displayed")
+    public void aErrorMessageWillBeDisplayed(String arg0, int arg1) throws IOException {
+        try{
+            JSONObject response = TodoInstance.send("GET", "/todos/" + arg1);
+            assertEquals(arg0,response.getJSONArray("errorMessages").getJSONObject(0).toString());
+        }
+        catch (Exception e) {
+            //Cannot find id
+            assertEquals(true,true);
+        }
+    }
+
+    @Given("{string} is the title of the non-existent task to be removed")
+    public void isTheTitleOfTheNonExistentTaskToBeRemoved(String arg0) throws IOException {
+        JSONObject json = new JSONObject();
+        json.put("title", arg0);
+        TodoInstance.post("/todos", json.toString());
     }
 
     @After
-    public void shutdown(){
-        TodoInstance.killInstance();
-        error = false;
+    public void clear() throws IOException {
+        // Remove all todos.
+        JSONObject response = TodoInstance.send("GET", "/todos");
+        JSONArray array = response.getJSONArray("todos");
+        for (int i = 0; i < array.length(); i++) {
+            String id = array.getJSONObject(i).getString("id");
+            TodoInstance.send("DELETE", "/todos/" + id);
+        }
+
+        // Remove all projects.
+        response = TodoInstance.send("GET", "/projects");
+        array = response.getJSONArray("projects");
+        for (int i = 0; i < array.length(); i++) {
+            String id = array.getJSONObject(i).getString("id");
+            TodoInstance.send("DELETE", "/projects/" + id);
+        }
+
+        // Remove all categories.
+        response = TodoInstance.send("GET", "/categories");
+        array = response.getJSONArray("categories");
+        for (int i = 0; i < array.length(); i++) {
+            String id = array.getJSONObject(i).getString("id");
+            TodoInstance.send("DELETE", "/categories/" + id);
+        }
     }
+
 }
