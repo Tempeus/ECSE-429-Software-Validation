@@ -14,7 +14,7 @@ Feature: a student, I create a to do list for a new class I am taking, so I can 
         | ECSE429 |
         | MATH240 |
 
-    Scenario Outline: Create a new class todo with a title, active status and description (Alternative Flow)
+    Scenario Outline: Create a new class todo with a title, done status and description (Alternative Flow)
       Given "<title>" is the title of the class
       And "<doneStatus>" is the done status of the class
       And "<description>" is the description of the class
@@ -28,7 +28,7 @@ Feature: a student, I create a to do list for a new class I am taking, so I can 
         | MATH240 | false     | Discrete Structures               |
 
 
-    Scenario Outline: Create a new class todo without a title but has an active status and description (Error flow)
+    Scenario Outline: Create a new class todo without a title but has a done status and description (Error flow)
       Given "<doneStatus>" is the done status of the class
       And "<description>" is the description of the class
       When the user posts a request to the server
