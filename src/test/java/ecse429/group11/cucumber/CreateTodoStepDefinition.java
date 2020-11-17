@@ -40,22 +40,6 @@ public class CreateTodoStepDefinition {
 
     //Scenario Outline: Normal Flow
 
-    @When("the user posts a request to the server")
-    public void theUserPostsARequestToTheServer(){
-        String validID = "/todos";
-        try {
-            TodoInstance.post(validID,json.toString());
-        } catch (IOException e) {
-            error = true;
-        }
-
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Then("a todo instance with {string} will be created")
     public void aTodoInstanceWithWillBeCreated(String title){
         JSONObject response = null;

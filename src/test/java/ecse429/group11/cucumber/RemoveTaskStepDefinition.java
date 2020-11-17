@@ -56,7 +56,6 @@ public class RemoveTaskStepDefinition {
         assertEquals(false, error);
     }
 
-
     @And("{string} is the id of the task category")
     public void isTheIdOfTheTaskCategory(String arg0) {
         json.put("categorytaskid", arg0);

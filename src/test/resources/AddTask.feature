@@ -30,7 +30,7 @@ Feature: Add Task
 
   Scenario Outline: Adding a task to a non-existent todo list (Error Flow)
     Given there does not exist a todo list with title "<listTitle>"
-    When I add a new task with title "<taskTitle>" to the todo list "<listTitle>"
+    When I add a new task with the title "<taskTitle>" to the todo list "<listTitle>"
     Then the system will inform the user that the todo list "<listTitle>" is non-existent
 
     Examples: 
