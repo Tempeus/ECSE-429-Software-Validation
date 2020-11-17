@@ -4,36 +4,33 @@ Feature: a student, I want to change a task description, to better represent the
     Given the Todo API server is running
 
   Scenario Outline: Change a task description (Normal Flow)
-    Given "<description>" is the new description of the task
-    And "<taskid>" is the given task id to be changed
-    When the user posts a request to the server
-    Then the task description will be changed to "<description>"
+    Given the title of the task "<title>"
+    When the user posts description change of task "<title>" to "<description>"
+    Then the task "<title>" description will be changed to "<description>"
 
     Examples:
-      | taskid   | description              |
-      | 1 | Introduction to Computer Science |
-      | 2 | Software Validation              |
-      | 2 | Discrete Structures              |
+      | title   | description              |
+      | comp250 | Introduction-to-Computer-Science |
+      | ecse429 | Software-Validation              |
+      | math240 | Discrete-Structures              |
 
   Scenario Outline: Change a task description that is related to a project (Alternative Flow)
-    Given "<description>" is the new description of the task
-    And "<taskid>" is the given task id to be changed
-    And is related to projects with id "<tasksofid>"
-    When the user posts a request to the server
-    Then the task description will be changed to "<description>"
+    Given the title of the task "<title>"
+    And "<title>" is related to projects with title "<projecttitle>"
+    When the user posts description change of task "<title>" to "<description>"
+    Then the task "<title>" description will be changed to "<description>"
 
     Examples:
-      | taskid| description                        | tasksofid |
-      | 1    | Introduction to Computer Science 1  | 1         |
-      | 2    | Software Validation 1              |  2         |
-      | 3    | Discrete Structures 1             |   3         |
+      | title| description                        | projecttitle |
+      | comp250    | Introduction-to-Computer Science   | 1         |
+      | ecse429    | Software-Validation               |  2         |
+      | math240    | Discrete-Structures              |   3         |
 
   Scenario Outline: Change a description for a non-existent task (Error Flow)
-    Given "<description>" is the new description of the task
-    And "<taskid>" is the given id of the non-existent task
-    When the user posts a request to the server
-    Then a "<Error Message>" error message 404 will be displayed
-
+    Given the id of a non-existent task is "<id>"
+    When the user posts description change of task "<title>" to "<description>"
+    Then an error message "<message>"
     Examples:
-      | taskid | description                      | Error Message |
-      | -1   | Introduction to Computer Science | 404           |
+      | id   | description                      | message                                                                | title |
+      | -1   | Introduction-to-Computer-Science | "No such todo entity instance with GUID or ID -1 found"           | comp   |
+      | 0   | Introduction-to-Computer-Science | "No such todo entity instance with GUID or ID 0 found"           | ecse     |
