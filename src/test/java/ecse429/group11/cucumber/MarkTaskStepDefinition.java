@@ -1,5 +1,6 @@
 package ecse429.group11.cucumber;
 
+import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -60,5 +61,32 @@ public class MarkTaskStepDefinition {
     @Then("system will output an error with error code {string}")
     public void system_will_output_an_error_with_error_code(String errorCode){
         assertEquals(error, errorCode);
+    }
+
+    @After
+    public void clear() throws IOException {
+        // Remove all todos.
+        JSONObject response = TodoInstance.send("GET", "/todos");
+        JSONArray array = response.getJSONArray("todos");
+        for (int i=0; i<array.length(); i++){
+            String id = array.getJSONObject(i).getString("id");
+            TodoInstance.send("DELETE", "/todos/" + id);
+        }
+
+        // Remove all projects.
+        response = TodoInstance.send("GET", "/projects");
+        array = response.getJSONArray("projects");
+        for (int i=0; i<array.length(); i++){
+            String id = array.getJSONObject(i).getString("id");
+            TodoInstance.send("DELETE", "/projects/" + id);
+        }
+
+        // Remove all categories.
+        response = TodoInstance.send("GET", "/categories");
+        array = response.getJSONArray("categories");
+        for (int i=0; i<array.length(); i++){
+            String id = array.getJSONObject(i).getString("id");
+            TodoInstance.send("DELETE", "/categories/" + id);
+        }
     }
 }
