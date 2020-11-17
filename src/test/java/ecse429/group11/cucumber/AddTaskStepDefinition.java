@@ -45,7 +45,7 @@ public class AddTaskStepDefinition {
         JSONObject todoJson = new JSONObject();
         todoJson.put("title", taskTitle);
         try {
-            TodoInstance.post(validID,todoJson.toString());
+            TodoInstance.post(validID, todoJson.toString());
         } catch (IOException e) {
             error = true;
         }
@@ -61,6 +61,9 @@ public class AddTaskStepDefinition {
 
         //Get to do ID from its title
         JSONObject tResponse = TodoInstance.send("GET", "/todos?title=" + taskTitle);
+        if (tResponse == null){
+            System.out.println("no task");
+        }
         String todoID = tResponse.getJSONArray("todos").getJSONObject(0).getString("id");
 
         JSONObject relationJson = new JSONObject();
@@ -117,7 +120,6 @@ public class AddTaskStepDefinition {
         //Get project ID from its title
         try{
             pResponse = TodoInstance.send("GET", "/projects?title=" + wrongTitle);
-            projectID = pResponse.getJSONArray("projects").getJSONObject(0).getString("id");
         }  catch (IOException e) {
             error = true;
         }
@@ -127,30 +129,8 @@ public class AddTaskStepDefinition {
             e.printStackTrace();
         }
 
-        //Get to do ID from its title
-        try{
-            tResponse = TodoInstance.send("GET", "/todos?title=" + taskTitle);
-            todoID = tResponse.getJSONArray("todos").getJSONObject(0).getString("id");
-        } catch (IOException e) {
+        if (pResponse.getJSONArray("projects").length() == 0){
             error = true;
-        }
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        JSONObject relationJson = new JSONObject();
-        relationJson.put("id", todoID);
-        try {
-            TodoInstance.post("/projects/"+projectID+"/tasks",relationJson.toString());
-        } catch (IOException e) {
-            error = true;
-        }
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 

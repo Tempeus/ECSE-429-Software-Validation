@@ -14,8 +14,8 @@ Feature: Add Task
     Examples: 
       | taskTitle         | projectTitle |
       | Relax             | Today        |
-      | Finish Assignment | General      |
-      | Watch Netflix     | Today        |
+      | FinishAssignment | General      |
+      | WatchNetflix     | Today        |
 
   Scenario Outline: Adding a pre-existing task to a todo list (Alternate Flow)
     Given there exists a project with title "<projectTitle>"
