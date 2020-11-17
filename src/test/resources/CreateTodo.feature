@@ -23,9 +23,9 @@ Feature: a student, I create a to do list for a new class I am taking, so I can 
 
       Examples:
         | title   | doneStatus  | description                       |
-        | COMP250 | true      | Introduction to Computer Science  |
-        | ECSE429 | true      | Software Validation               |
-        | MATH240 | false     | Discrete Structures               |
+        | COMP250 | true      | Introduction-to-Computer Science  |
+        | ECSE429 | true      | Software-Validation               |
+        | MATH240 | false     | Discrete-Structures               |
 
 
     Scenario Outline: Create a new class todo without a title but has a done status and description (Error flow)
@@ -36,6 +36,6 @@ Feature: a student, I create a to do list for a new class I am taking, so I can 
 
     Examples:
       | doneStatus  | description                        |
-      | true      | Introduction to Computer Science   |
-      | true      | Software Validation                |
-      | false     | Discrete Structures                |
+      | true      | Introduction-to-Computer Science   |
+      | true      | Software-Validation                |
+      | false     | Discrete-Structures                |
