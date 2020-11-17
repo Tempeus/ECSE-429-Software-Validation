@@ -19,12 +19,35 @@ public class AdjustPriorityStepDefinition {
     public static int todoID = 0;
 
     @Given("HIGH, MEDIUM and LOW categories are registered in the todo manager API")
-    public void highMEDIUMAndLOWCategoriesAreRegisteredInTheTodoManagerAPI() {
+    public void highMEDIUMAndLOWCategoriesAreRegisteredInTheTodoManagerAPI() throws IOException {
+        JSONObject json1 = new JSONObject();
+        json1.put("title", "HIGH");
+        JSONObject json2 = new JSONObject();
+        json2.put("title", "MEDIUM");
+        JSONObject json3 = new JSONObject();
+        json3.put("title", "LOW");
+        TodoInstance.post("/categories", json1.toString());
+        TodoInstance.post("/categories", json2.toString());
+        TodoInstance.post("/categories", json3.toString());
     }
 
     @Given("the task with title {string} exists")
     public void theTaskWithTitleExists(String title) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
+        JSONObject todo = new JSONObject();
+        todo.put("title", title);
+
+        String validID = "/todos";
+        try {
+            TodoInstance.post(validID,todo.toString());
+        } catch (IOException e) {
+            error = true;
+        }
+
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            error = true;
+        }
     }
 
     @Given("the task has {string} priority")

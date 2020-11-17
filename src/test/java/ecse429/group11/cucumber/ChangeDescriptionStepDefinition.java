@@ -19,13 +19,13 @@ public class ChangeDescriptionStepDefinition {
     public static boolean error = false;
 
     @Given("{string} is the new description of the task")
-    public void isTheNewDescriptionOfTheTask(String arg0) {
-        json.put("description", arg0);
+    public void isTheNewDescriptionOfTheTask(String description) {
+        json.put("description", description);
     }
 
     @And("{string} is the given task id to be changed")
-    public void isTheGivenTitleIdToBeChanged(String arg0) {
-        json.put("taskid", arg0);
+    public void isTheGivenTitleIdToBeChanged(String taskid) {
+        json.put("taskid", taskid);
     }
 
     @When("the user posts a request to the server")
