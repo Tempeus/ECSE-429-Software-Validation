@@ -6,6 +6,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -29,7 +30,11 @@ public class CategorizeTaskStepDefinition {
     public void aTodoWithTheTitleDoneStatusAndDescription(String title, String doneStatus, String description){
         JSONObject todo = new JSONObject();
         todo.put("title", title);
-        todo.put("doneStatus", doneStatus);
+        boolean status = false;
+        if (doneStatus.equals("true")){
+            status = true;
+        }
+        todo.put("doneStatus", status);
         todo.put("description", description);
 
         String validID = "/todos";
@@ -47,21 +52,21 @@ public class CategorizeTaskStepDefinition {
     }
 
     @When("the user requests to give the task {string} with a priority {string}")
-    public void theUserRequestsToGiveTheTaskWithAPriority(String title, String priority){
+    public void theUserRequestsToGiveTheTaskWithAPriority(String title, String priority) throws IOException {
+        JSONObject pResponse = TodoInstance.send("GET", "/categories?title=" + priority);
+        String pID = pResponse.getJSONArray("categories").getJSONObject(0).getString("id");
 
-        todoID = 3; //ID is 3 since there already exists two todos by default
-        json.put("categories", priority);
+        JSONObject tResponse = TodoInstance.send("GET", "/todos?title=" + title);
+        String tID = tResponse.getJSONArray("todos").getJSONObject(0).getString("id");
 
+        JSONObject body = new JSONObject();
+        body.put("id", pID);
+
+        TodoInstance.post("/todos/" + tID + "/categories", body.toString());
     }
 
     @Then("the task {string} will be assigned with the category {string}")
-    public void theTaskWillBeAssignedWithTheCategory(String title, String priority){
-        try {
-            TodoInstance.post("/todos/" + todoID + "/categories", json.toString());
-        } catch (IOException e) {
-            error = true;
-        }
-
+    public void theTaskWillBeAssignedWithTheCategory(String title, String priority) throws IOException {
         JSONObject response = null;
         try {
             response = TodoInstance.send("GET", "/todos?title=" + title);
@@ -69,24 +74,33 @@ public class CategorizeTaskStepDefinition {
             error = false;
         }
 
-        String taskName = response.getJSONArray("todos").getJSONObject(0).getString("title");
+        JSONArray array = response.getJSONArray("todos").getJSONObject(0).getJSONArray("categories");
 
-        String TaskCategoryResult = response.getJSONArray("todos").getJSONObject(0).getString("categories");
+        JSONObject pResponse = TodoInstance.send("GET", "/categories?title=" + priority);
+        String pID = pResponse.getJSONArray("categories").getJSONObject(0).getString("id");
+        boolean isSet = false;
+        for (int i=0; i<array.length();i++){
+            if(array.getJSONObject(i).getString("id").equals(pID)){
+                isSet = true;
+            }
+        }
 
-        assertEquals(priority, TaskCategoryResult);
-        assertEquals(title, taskName);
+        assertEquals(true, isSet);
         assertEquals(false, error);
     }
 
     //Scenario Outline: Alternative Flow
 
     @Given("a todo with the title {string}, done status {string}, description {string} and category {string}")
-    public void aTodoWithTheTitleDoneStatusDescriptionAndCategory(String title, String doneStatus, String description, String priority){
+    public void aTodoWithTheTitleDoneStatusDescriptionAndCategory(String title, String doneStatus, String description, String priority) throws IOException {
         JSONObject todo = new JSONObject();
         todo.put("title", title);
-        todo.put("doneStatus", doneStatus);
+        boolean status = false;
+        if (doneStatus.equals("true")){
+            status = true;
+        }
+        todo.put("doneStatus", status);
         todo.put("description", description);
-        todo.put("category", priority);
 
         String validID = "/todos";
         try {
@@ -100,22 +114,40 @@ public class CategorizeTaskStepDefinition {
         } catch (InterruptedException e) {
             error = true;
         }
+
+        JSONObject pResponse = TodoInstance.send("GET", "/categories?title=" + priority);
+        String pID = pResponse.getJSONArray("categories").getJSONObject(0).getString("id");
+
+        JSONObject tResponse = TodoInstance.send("GET", "/todos?title=" + title);
+        String tID = tResponse.getJSONArray("todos").getJSONObject(0).getString("id");
+
+        JSONObject body = new JSONObject();
+        body.put("id", pID);
+
+        TodoInstance.post("/todos/" + tID + "/categories", body.toString());
+
     }
 
-    @When("user request to update the category of {string} to {string}")
-    public void userRequestToUpdateTheCategoryOfFromTo(String title, String newPriority){
+    @When("user request to update the category of {string} from {string} to {string}")
+    public void userRequestToUpdateTheCategoryOfFromTo(String title, String priority, String newPriority) throws IOException {
+        JSONObject pResponse = TodoInstance.send("GET", "/categories?title=" + priority);
+        String prevpID = pResponse.getJSONArray("categories").getJSONObject(0).getString("id");
 
-        todoID = 3; //ID is 3 since there already exists two todos by default
-        json.put("categories", newPriority);
+        pResponse = TodoInstance.send("GET", "/categories?title=" + newPriority);
+        String nextpID = pResponse.getJSONArray("categories").getJSONObject(0).getString("id");
+
+        JSONObject tResponse = TodoInstance.send("GET", "/todos?title=" + title);
+        String tID = tResponse.getJSONArray("todos").getJSONObject(0).getString("id");
+
+        TodoInstance.send("DELETE", "/todos/" + tID + "/categories/" + prevpID);
+        JSONObject body = new JSONObject();
+        body.put("id", nextpID);
+
+        TodoInstance.post("/todos/" + tID + "/categories", body.toString());
     }
 
     @Then("task {string} will be assigned with a new category of {string}")
-    public void taskWillBeAssignedWithANewCategoryOf(String title, String newPriority){
-        try {
-            TodoInstance.post("/todos/" + todoID + "/categories", json.toString());
-        } catch (IOException e) {
-            error = true;
-        }
+    public void taskWillBeAssignedWithANewCategoryOf(String title, String newPriority) throws IOException {
 
         JSONObject response = null;
         try {
@@ -124,12 +156,18 @@ public class CategorizeTaskStepDefinition {
             error = false;
         }
 
-        String taskName = response.getJSONArray("todos").getJSONObject(0).getString("title");
+        JSONArray array = response.getJSONArray("todos").getJSONObject(0).getJSONArray("categories");
 
-        String TaskCategoryResult = response.getJSONArray("todos").getJSONObject(0).getString("categories");
+        JSONObject pResponse = TodoInstance.send("GET", "/categories?title=" + newPriority);
+        String pID = pResponse.getJSONArray("categories").getJSONObject(0).getString("id");
+        boolean isSet = false;
+        for (int i=0; i<array.length();i++){
+            if(array.getJSONObject(i).getString("id").equals(pID)){
+                isSet = true;
+            }
+        }
 
-        assertEquals(newPriority, TaskCategoryResult);
-        assertEquals(title, taskName);
+        assertEquals(true, isSet);
         assertEquals(false, error);
 
     }
@@ -138,20 +176,20 @@ public class CategorizeTaskStepDefinition {
 
     @When("user request to categorize a todo with title {string} with {string}")
     public void userRequestToCategorizeATodoWithTitleWith(String fakeTitle, String priority) throws IOException {
-        json.put("category", priority);
         JSONObject response = null;
         try {
-            response = TodoInstance.send("GET", "/todos");
+            response = TodoInstance.send("GET", "/todos?title=" + fakeTitle);
         } catch (IOException e) {
             error = true;
         }
 
-        String todoTitle = response.getJSONArray("todos").getJSONObject(2).getString("title");
+        int length = response.getJSONArray("todos").length();
 
-        if(!todoTitle.equals(fakeTitle))
+        if(length == 0){
             error = true;
-        else
+        } else {
             error = false;
+        }
     }
 
     @Then("system will output an error")
