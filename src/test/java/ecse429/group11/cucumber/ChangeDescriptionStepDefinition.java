@@ -1,5 +1,6 @@
 package ecse429.group11.cucumber;
 
+import ecse429.group11.restAPI.TodoInstance;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -18,7 +19,7 @@ public class ChangeDescriptionStepDefinition {
 
     @Given("the Todo API server is running")
     public void the_Todo_API_server_is_running(){
-        java.ecse429.group11.restAPI.TodoInstance.runApplication();
+        TodoInstance.runApplication();
         json = new JSONObject();
     }
 
@@ -36,7 +37,7 @@ public class ChangeDescriptionStepDefinition {
     public void theUserPostsADescriptionRequestToTheServer(){
         String validID = "/todos/" + json.get("taskid").toString();
         try {
-            java.ecse429.group11.restAPI.TodoInstance.post(validID,json.get("description").toString());
+            TodoInstance.post(validID,json.get("description").toString());
         } catch (IOException e) {
             error = true;
         }
@@ -51,12 +52,11 @@ public class ChangeDescriptionStepDefinition {
     public void theTaskDescriptionWillBeChangedTo(String arg0) {
         JSONObject response = null;
         try {
-            response = java.ecse429.group11.restAPI.TodoInstance.send("GET", "/todos/" + json.get("id").toString() );
+            response = TodoInstance.send("GET", "/todos/" + json.get("id").toString() );
         } catch (IOException e) {
             error = true;
         }
 
-        //todo: get the title instead of the length
         assertEquals(json.get("description").toString(), response.getJSONArray("todos").getJSONObject(0).get("description").toString());
         assertEquals(false, error);
     }
@@ -86,7 +86,7 @@ public class ChangeDescriptionStepDefinition {
 
     @After
     public void shutdown(){
-        java.ecse429.group11.restAPI.TodoInstance.killInstance();
+        TodoInstance.killInstance();
         error = false;
     }
 }

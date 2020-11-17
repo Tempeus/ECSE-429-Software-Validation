@@ -19,7 +19,7 @@ Feature: a student, I want to change a task description, to better represent the
     Given "<description>" is the new description of the task
     And "<taskid>" is the given task id to be changed
     And is related to projects with id "<tasksofid>"
-    When the user posts a request to the server
+    When the user posts a request to the server to change the description
     Then the task description will be changed to "<description>"
 
     Examples:
@@ -31,7 +31,7 @@ Feature: a student, I want to change a task description, to better represent the
   Scenario Outline: Change a description for a non-existent task (Error Flow)
     Given "<description>" is the new description of the task
     And "<taskid>" is the given id of the non-existent task
-    When the user posts a request to the server
+    When the user posts a request to the server to change the description
     Then a "<Error Message>" error message 404 will be displayed
 
     Examples:

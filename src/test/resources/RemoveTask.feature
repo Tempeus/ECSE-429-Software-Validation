@@ -6,7 +6,7 @@ Feature: a student, I remove an unnecessary task from my course to do list, so I
   Scenario Outline: Remove a task from my course to do list (Normal Flow)
     Given "<taskid>" is the id of the task
     And "<todolistid>" is the id of the to do list
-    When the user posts a request to the server
+    When the user posts a request to the server to remove a task
     Then the to do list will no longer have the task
 
     Examples:
@@ -18,7 +18,7 @@ Feature: a student, I remove an unnecessary task from my course to do list, so I
     Given "<taskid>" is the id of the task
     And "<todolistid>" is the id of the to do list
     And "<categoryid>" is the id of the task category
-    When the user posts a request to the server
+    When the user posts a request to the server to remove a task
     Then the to do list will no longer have the task
     Then the to do list will no longer have the task
 
@@ -32,7 +32,7 @@ Feature: a student, I remove an unnecessary task from my course to do list, so I
   Scenario Outline: Remove a non-existent task from my course to do list (Error Flow)
     Given "<taskid>" is the id of the non-existent task
     And "<todolistid>" is the id of the to do list
-    When the user posts a request to the server
+    When the user posts a request to the server to remove a task
     Then a "<Error Message>" error 404 message will be displayed
 
     Examples:
