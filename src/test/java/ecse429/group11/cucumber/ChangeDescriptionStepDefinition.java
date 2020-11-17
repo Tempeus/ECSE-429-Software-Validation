@@ -112,6 +112,5 @@ public class ChangeDescriptionStepDefinition {
             TodoInstance.send("DELETE", "/categories/" + id);
         }
     }
-
 }
 
