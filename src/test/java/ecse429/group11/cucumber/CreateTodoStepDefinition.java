@@ -33,53 +33,80 @@ public class CreateTodoStepDefinition {
         json.put("description", description);
     }
 
-    @Given("{string} is the done status of the class")
-    public void is_the_done_status_of_the_class(String doneStatus){
-        json.put("doneStatus", doneStatus);
+    @Given("{string} is the active state of the class")
+    public void is_the_done_status_of_the_class(String active){
+        boolean status = false;
+        if (active.equals("true")){
+            status = true;
+        }
+        json.put("active", status);
+    }
+
+    @Given("{string} is the completion state of the class")
+    public void is_the_completion_state_of_the_class(String completed){
+        boolean status = false;
+        if (completed.equals("true")){
+            status = true;
+        }
+        json.put("completed", status);
     }
 
     //Scenario Outline: Normal Flow
 
-    @Then("a todo instance with {string} will be created")
+    @When("the user creates a new to do list for a class")
+    public void the_user_creates_a_new_class(){
+        System.out.println(json.toString());
+        if (!(json.has("title"))){
+            error = true;
+        }
+        try {
+            TodoInstance.post("/projects", json.toString());
+        } catch (IOException e) {
+            error = true;
+        }
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Then("a todo list instance with {string} will be created")
     public void aTodoInstanceWithWillBeCreated(String title){
         JSONObject response = null;
         try {
-            response = TodoInstance.send("GET", "/todos");
+            response = TodoInstance.send("GET", "/projects?title=" + title);
         } catch (IOException e) {
             error = true;
         }
 
-        assertEquals(title,response.getJSONArray("todos").getJSONObject(2).getString("title"));
-        assertEquals(false, error);
+        assertEquals(title, response.getJSONArray("projects").getJSONObject(0).getString("title"));
     }
 
     //Scenario Outline: Alternative Flow
 
-    @Then("a todo instance with {string}, {string}, {string} will be created")
-    public void aTodoInstanceWithWillBeCreated(String title, String doneStatus, String description){
+    @Then("a todo instance with {string}, {string}, {string}, {string} will be created")
+    public void aTodoInstanceWithWillBeCreated(String title, String active, String completed, String description){
         JSONObject response = null;
 
         try {
-            response = TodoInstance.send("GET", "/todos");
+            response = TodoInstance.send("GET", "/projects?title=" + title);
         } catch (IOException e) {
             error = true;
         }
 
-        assertEquals(title,response.getJSONArray("todos").getJSONObject(2).getString("title"));
-        assertEquals(false, error);
+        JSONObject todoList = response.getJSONArray("projects").getJSONObject(0);
+
+        assertEquals(title, todoList.getString("title"));
+        assertEquals(active, todoList.getString("active"));
+        assertEquals(completed, todoList.getString("completed"));
+        assertEquals(description, todoList.getString("description"));
     }
 
     //Scenario Outline: Error Flow
     @Then("error 404 will occur")
     public void error404WillOccur(){
-        JSONObject response = null;
-
-        try {
-            response = TodoInstance.send("GET", "/todos");
-        } catch (IOException e) {
-            error = true;
-        }
-
+        // assuming we aren't supposed to be able to create a project without a title.
         assertEquals(true, error);
     }
 
