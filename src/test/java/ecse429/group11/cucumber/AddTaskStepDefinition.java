@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class AddTaskStepDefinition {
-    public static JSONObject json = null;
+    //public static JSONObject json = null;
     public static boolean error = false;
     public static int todoID = 0;
 
@@ -140,7 +140,7 @@ public class AddTaskStepDefinition {
             e.printStackTrace();
         }
 
-        JSONObject relationJson = null;
+        JSONObject relationJson = new JSONObject();
         relationJson.put("id", todoID);
         try {
             TodoInstance.post("/projects/"+projectID+"/tasks",relationJson.toString());

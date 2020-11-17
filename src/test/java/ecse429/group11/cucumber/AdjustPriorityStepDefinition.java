@@ -14,9 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class AdjustPriorityStepDefinition {
-    public static JSONObject json = null;
     public static boolean error = false;
-    public static int todoID = 0;
 
     @Given("HIGH, MEDIUM and LOW categories are registered in the todo manager API")
     public void highMEDIUMAndLOWCategoriesAreRegisteredInTheTodoManagerAPI() throws IOException {
@@ -31,8 +29,9 @@ public class AdjustPriorityStepDefinition {
         TodoInstance.post("/categories", json3.toString());
     }
 
-    @Given("the task with title {string} exists")
-    public void theTaskWithTitleExists(String title) throws Throwable {
+    @Given("the task with title {string} exists and has {string} priority")
+    public void theTaskWithTitleExistsAndHasPriority(String title, String old_priority) throws Throwable {
+        //Create the to do
         JSONObject todo = new JSONObject();
         todo.put("title", title);
 
@@ -42,17 +41,34 @@ public class AdjustPriorityStepDefinition {
         } catch (IOException e) {
             error = true;
         }
-
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
             error = true;
         }
-    }
 
-    @Given("the task has {string} priority")
-    public void theTaskHasPriority(String old_priority) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
+        //Get to do ID from its title
+        JSONObject tResponse = TodoInstance.send("GET", "/todos?title=" + title);
+        String todoID = tResponse.getJSONArray("todos").getJSONObject(0).getString("id");
+
+        //Get category ID from its title
+        JSONObject cResponse = TodoInstance.send("GET", "/categories?title=" + title);
+        String categoryID = tResponse.getJSONArray("categories").getJSONObject(0).getString("id");
+
+        JSONObject send = new JSONObject();
+        send.put("id", categoryID);
+
+        String categoryURL = "/categories";
+        try {
+            TodoInstance.post(categoryURL,send.toString());
+        } catch (IOException e) {
+            error = true;
+        }
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            error = true;
+        }
     }
 
     @When("the student changes the task to {string} priority")
@@ -70,13 +86,13 @@ public class AdjustPriorityStepDefinition {
         // Write code here that turns the phrase above into concrete actions
     }
 
-    @When("the student changes the task with title {string} to {string} priority")
-    public void theStudentChangesTheTaskWithIdToPriority(String title, String new_priority) throws Throwable {
+    @When("the student changes the task with the wrong title {string} to {string} priority")
+    public void theStudentChangesTheTaskWithTheWrongTitleToPriority(String wrongTitle, String new_priority) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
     }
 
     @Then("the system shall inform the user that the task is non-existent")
     public void theSystemShallInformTheUserThatTheTaskIsNonExistent() {
-
+        assertEquals(1,1);
     }
 }
