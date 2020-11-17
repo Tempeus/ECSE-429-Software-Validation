@@ -31,7 +31,7 @@ public class RemoveTaskStepDefinition {
         TodoInstance.post("/projects", json.toString());
     }
 
-    @When("the user posts a request to the server to remove a task {string} from {string}>")
+    @When("the user posts a request to the server to remove a task {string} from {string}")
     public void theUserPostsARequestToTheServerToRemoveATaskFrom(String arg0, String arg1) throws IOException {
         JSONObject response = TodoInstance.send("GET", "/todos?title=" + arg0);
 
@@ -82,8 +82,8 @@ public class RemoveTaskStepDefinition {
         }
     }
 
-    @Then("a {string} error with {string} message will be displayed")
-    public void aErrorMessageWillBeDisplayed(String arg0, int arg1) throws IOException {
+    @Then("a {string} error with {string} message wl be displayed")
+    public void aErrorMessageWillBeDisplayed(String arg0, int arg1){
         try{
             JSONObject response = TodoInstance.send("GET", "/todos/" + arg1);
             assertEquals(arg0,response.getJSONArray("errorMessages").getJSONObject(0).toString());

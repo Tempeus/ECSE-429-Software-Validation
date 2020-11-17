@@ -6,7 +6,7 @@ Feature: a student, I remove an unnecessary task from my course to do list, so I
   Scenario Outline: Remove a task from my course to do list (Normal Flow)
     Given "<title>" is the title of the task to be removed
     And "<titleproject>" is the title of the to do list
-    When the user posts a request to the server to remove a task "<title>" from "<titleproject">
+    When the user posts a request to the server to remove a task "<title>" from "<titleproject>"
     Then the to do "<titleproject>" list will no longer have the task "<title>"
 
     Examples:
@@ -18,7 +18,7 @@ Feature: a student, I remove an unnecessary task from my course to do list, so I
     Given "<title>" is the title of the task to be removed
     And "<titleproject>" is the title of the to do list
     And "<titlecat>" is the id of the task category related to "<task>"
-    When the user posts a request to the server to remove a task "<title>" from "<titleproject">
+    When the user posts a request to the server to remove a task "<title>" from "<titleproject>"
     Then the to do "<titleproject>" list will no longer have the task "<title>"
 
     Examples:
@@ -30,8 +30,8 @@ Feature: a student, I remove an unnecessary task from my course to do list, so I
   Scenario Outline: Remove a non-existent task from my course to do list (Error Flow)
     Given the id of a non-existent task is "<id>"
     And "<titleproject>" is the title of the to do list
-    When the user posts a request to the server to remove a task "<title>" from "<titleproject">
-    Then a "<message>" error with "<id>" message will be displayed
+    When the user posts a request to the server to remove a task "<title>" from "<titleproject>"
+    Then an error message "<message>" with "<id>" will occur
 
     Examples:
       | id | titleproject                      | message                                  | title |
