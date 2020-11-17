@@ -54,11 +54,12 @@ public class QueryPriorityStepDefinition {
         String pID = pResponse.getJSONArray("categories").getJSONObject(0).getString("id");
         System.out.println(pID);
 
-        JSONObject body = new JSONObject();
-        body.put("id", pID);
+
         for (int i=0; i<amount; i++){
             String tID = tResponse.getJSONArray("todos").getJSONObject(i).getString("id");
-            TodoInstance.post("/todos/" + tID + "/categories", body.toString());
+            JSONObject body = new JSONObject();
+            body.put("id", tID);
+            TodoInstance.post("/categories/" + pID + "/todos", body.toString());
             Thread.sleep(500);
         }
     }
