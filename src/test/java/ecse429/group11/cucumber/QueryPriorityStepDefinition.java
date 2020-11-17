@@ -17,7 +17,7 @@ public class QueryPriorityStepDefinition {
     int tAmount;
 
     @Given("HIGH, MEDIUM and LOW categories exist")
-    public void HIGH_MEDIUM_and_LOW_categories_exist() throws IOException{
+    public void HIGH_MEDIUM_and_LOW_categories_exist() throws IOException, InterruptedException {
         JSONObject json1 = new JSONObject();
         json1.put("title", "HIGH");
         JSONObject json2 = new JSONObject();
@@ -25,12 +25,15 @@ public class QueryPriorityStepDefinition {
         JSONObject json3 = new JSONObject();
         json3.put("title", "LOW");
         TodoInstance.post("/categories", json1.toString());
+        Thread.sleep(500);
         TodoInstance.post("/categories", json2.toString());
+        Thread.sleep(500);
         TodoInstance.post("/categories", json3.toString());
+        Thread.sleep(500);
     }
 
     @Given("{int} todos with the title {string}, done status {string} and priority {string}")
-    public void todos_with_the_title_done_status_and_priority(int amount, String title, String doneStatus, String priority) throws IOException{
+    public void todos_with_the_title_done_status_and_priority(int amount, String title, String doneStatus, String priority) throws IOException, InterruptedException {
         JSONObject json = new JSONObject();
         json.put("title", title);
         boolean status = false;
@@ -41,19 +44,23 @@ public class QueryPriorityStepDefinition {
 
         for (int i=0; i<amount; i++){
             TodoInstance.post("/todos", json.toString());
+            Thread.sleep(500);
         }
 
         JSONObject tResponse = TodoInstance.send("GET", "/todos?title=" + title);
+        Thread.sleep(500);
         JSONObject pResponse = TodoInstance.send("GET", "/categories?title=" + priority);
 
         String pID = pResponse.getJSONArray("categories").getJSONObject(0).getString("id");
         System.out.println(pID);
 
-        JSONObject body = new JSONObject();
-        body.put("id", pID);
+
         for (int i=0; i<amount; i++){
             String tID = tResponse.getJSONArray("todos").getJSONObject(i).getString("id");
-            TodoInstance.post("/todos/" + tID + "/categories", body.toString());
+            JSONObject body = new JSONObject();
+            body.put("id", tID);
+            TodoInstance.post("/categories/" + pID + "/todos", body.toString());
+            Thread.sleep(500);
         }
     }
 
@@ -81,7 +88,13 @@ public class QueryPriorityStepDefinition {
     }
 
     @Given("no todos with priority {string}")
-    public void no_todos_with_priority(String priority){
-
+    public void no_todos_with_priority(String priority) throws IOException {
+        // Remove all todos.
+        JSONObject response = TodoInstance.send("GET", "/todos");
+        JSONArray array = response.getJSONArray("todos");
+        for (int i=0; i<array.length(); i++){
+            String id = array.getJSONObject(i).getString("id");
+            TodoInstance.send("DELETE", "/todos/" + id);
+        }
     }
 }

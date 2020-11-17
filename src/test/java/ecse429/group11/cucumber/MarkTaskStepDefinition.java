@@ -26,6 +26,11 @@ public class MarkTaskStepDefinition {
         }
         json.put("doneStatus", doneStatus);
         TodoInstance.post("/todos", json.toString());
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @When("the user requests to mark the task {string} with a done status {string}")
@@ -41,6 +46,11 @@ public class MarkTaskStepDefinition {
         if (response.getJSONArray("todos").length() != 0){
             String id = response.getJSONArray("todos").getJSONObject(0).getString("id");
             TodoInstance.post("/todos/" + id, json.toString());
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } else {
             error = "404";
         }
