@@ -9,8 +9,8 @@ Feature: Adjust Priority
 
   Scenario Outline: Student changed priority to a different priority (Normal Flow)
     Given the task with title "<title>" exists and has "<old_priority>" priority
-    When the student changes the task to "<new_priority>" priority
-    Then the priority of the task should be "<new_priority>"
+    When the student changes the task "<title>" from "<old_priority>" priority to "<new_priority>" priority
+    Then the priority of the task "<title>" should be "<new_priority>"
 
     Examples: 
       | title    | old_priority | new_priority |
@@ -23,8 +23,8 @@ Feature: Adjust Priority
 
   Scenario Outline: Student changed priority to the same priority (Alternative Flow)
     Given the task with title "<title>" exists and has "<old_priority>" priority
-    When the student changes the task to "<new_priority>" priority
-    Then the priority of the task should be "<new_priority>"
+    When the student changes the task "<title>" from "<old_priority>" priority to "<new_priority>" priority
+    Then the priority of the task "<title>" should be "<new_priority>"
 
     Examples: 
       | title   | old_priority | new_priority |
@@ -34,7 +34,7 @@ Feature: Adjust Priority
 
   Scenario Outline: Student attempted to change priority of non-existing task (Error Flow)
     Given the task with title "<title>" exists and has "<old_priority>" priority
-    When the student changes the task with the wrong title "<wrongTitle>" to "<new_priority>" priority
+    When the student changes the task with the wrong title "<wrongTitle>" from "<old_priority>" priority to "<new_priority>" priority
     Then the system shall inform the user that the task is non-existent
 
     Examples:

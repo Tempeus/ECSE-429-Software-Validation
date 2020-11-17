@@ -6,6 +6,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -52,47 +53,87 @@ public class AdjustPriorityStepDefinition {
         String todoID = tResponse.getJSONArray("todos").getJSONObject(0).getString("id");
 
         //Get category ID from its title
-        JSONObject cResponse = TodoInstance.send("GET", "/categories?title=" + title);
-        String categoryID = tResponse.getJSONArray("categories").getJSONObject(0).getString("id");
+        JSONObject cResponse = TodoInstance.send("GET", "/categories?title=" + old_priority);
+        String categoryID = cResponse.getJSONArray("categories").getJSONObject(0).getString("id");
 
-        JSONObject send = new JSONObject();
-        send.put("id", categoryID);
+        JSONObject categoryJSON = new JSONObject();
+        categoryJSON.put("id", categoryID);
 
-        String categoryURL = "/categories";
         try {
-            TodoInstance.post(categoryURL,send.toString());
+            TodoInstance.post("/todos/"+todoID+"/categories",categoryJSON.toString());
         } catch (IOException e) {
             error = true;
         }
         try {
-            Thread.sleep(200);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             error = true;
         }
     }
 
-    @When("the student changes the task to {string} priority")
-    public void theStudentChangesTheTaskToPriority(String new_priority) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
+    @When("the student changes the task {string} from {string} priority to {string} priority")
+    public void theStudentChangesTheTaskToPriority(String title, String old_priority, String new_priority) throws Throwable {
+        //Get to do ID from its title
+        JSONObject tResponse = TodoInstance.send("GET", "/todos?title=" + title);
+        String todoID = tResponse.getJSONArray("todos").getJSONObject(0).getString("id");
+
+        //Get old category ID from its title
+        JSONObject cOldResponse = TodoInstance.send("GET", "/categories?title=" + old_priority);
+        String oldCategoryID = cOldResponse.getJSONArray("categories").getJSONObject(0).getString("id");
+
+        //Get new category ID from its title
+        JSONObject cNewResponse = TodoInstance.send("GET", "/categories?title=" + new_priority);
+        String newCategoryID = cNewResponse.getJSONArray("categories").getJSONObject(0).getString("id");
+
+        //Delete Previous Connection
+        TodoInstance.send("DELETE", "/todos/" + todoID + "/categories/" + oldCategoryID);
+
+        //Recreate
+        JSONObject body = new JSONObject();
+        body.put("id", newCategoryID);
+        TodoInstance.post("/todos/" + todoID + "/categories", body.toString());
     }
 
-    @Then("the priority of the task should be {string}")
-    public void thePriorityOfTheTaskShouldBe(String new_priority) throws Throwable {
-        assertEquals(1,1);
+    @Then("the priority of the task {string} should be {string}")
+    public void thePriorityOfTheTaskShouldBe(String title, String new_priority) throws Throwable {
+        //Get category ID from its title
+        JSONObject cResponse = TodoInstance.send("GET", "/categories?title=" + new_priority);
+        String categoryID = cResponse.getJSONArray("categories").getJSONObject(0).getString("id");
+
+        //Get to do ID from its title
+        JSONObject tResponse = TodoInstance.send("GET", "/todos?title=" + title);
+        String todoID = tResponse.getJSONArray("todos").getJSONObject(0).getString("id");
+
+        JSONArray array = tResponse.getJSONArray("todos").getJSONObject(0).getJSONArray("categories");
+        boolean isSet = false;
+        for (int i=0; i<array.length();i++){
+            if(array.getJSONObject(i).getString("id").equals(categoryID)){
+                isSet = true;
+            }
+        }
+        assertTrue(isSet);
     }
 
-    @Given("the task with title {string} does not exist")
-    public void theTaskWithIdDoesNotExist(String title) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-    }
+    @When("the student changes the task with the wrong title {string} from {string} priority to {string} priority")
+    public void theStudentChangesTheTaskWithTheWrongTitleToPriority(String wrongTitle, String old_priority, String new_priority) throws Throwable {
+        JSONObject response = null;
+        try {
+            response = TodoInstance.send("GET", "/todos?title=" + wrongTitle);
+        } catch (IOException e) {
+            error = true;
+        }
 
-    @When("the student changes the task with the wrong title {string} to {string} priority")
-    public void theStudentChangesTheTaskWithTheWrongTitleToPriority(String wrongTitle, String new_priority) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
+        int length = response.getJSONArray("todos").length();
+
+        if (length == 0){
+            error = true;
+        } else {
+            error = false;
+        }
     }
 
     @Then("the system shall inform the user that the task is non-existent")
     public void theSystemShallInformTheUserThatTheTaskIsNonExistent() {
-        assertEquals(1,1);
+        assertTrue(error);
     }
 }
