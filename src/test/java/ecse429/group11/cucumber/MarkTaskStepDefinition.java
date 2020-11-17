@@ -65,28 +65,28 @@ public class MarkTaskStepDefinition {
 
     @After
     public void clear() throws IOException {
-//        // Remove all todos.
-//        JSONObject response = TodoInstance.send("GET", "/todos");
-//        JSONArray array = response.getJSONArray("todos");
-//        for (int i=0; i<array.length(); i++){
-//            String id = array.getJSONObject(i).getString("id");
-//            TodoInstance.send("DELETE", "/todos/" + id);
-//        }
-//
-//        // Remove all projects.
-//        response = TodoInstance.send("GET", "/projects");
-//        array = response.getJSONArray("projects");
-//        for (int i=0; i<array.length(); i++){
-//            String id = array.getJSONObject(i).getString("id");
-//            TodoInstance.send("DELETE", "/projects/" + id);
-//        }
-//
-//        // Remove all categories.
-//        response = TodoInstance.send("GET", "/categories");
-//        array = response.getJSONArray("categories");
-//        for (int i=0; i<array.length(); i++){
-//            String id = array.getJSONObject(i).getString("id");
-//            TodoInstance.send("DELETE", "/categories/" + id);
-//        }
+        // Remove all todos.
+        JSONObject response = TodoInstance.send("GET", "/todos");
+        JSONArray array = response.getJSONArray("todos");
+        for (int i=0; i<array.length(); i++){
+            String id = array.getJSONObject(i).getString("id");
+            TodoInstance.send("DELETE", "/todos/" + id);
+        }
+
+        // Remove all projects.
+        response = TodoInstance.send("GET", "/projects");
+        array = response.getJSONArray("projects");
+        for (int i=0; i<array.length(); i++){
+            String id = array.getJSONObject(i).getString("id");
+            TodoInstance.send("DELETE", "/projects/" + id);
+        }
+
+        // Remove all categories.
+        response = TodoInstance.send("GET", "/categories");
+        array = response.getJSONArray("categories");
+        for (int i=0; i<array.length(); i++){
+            String id = array.getJSONObject(i).getString("id");
+            TodoInstance.send("DELETE", "/categories/" + id);
+        }
     }
 }
