@@ -4,6 +4,7 @@ import ecse429.group11.restAPI.TodoInstance;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import java.io.FileWriter;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
@@ -13,33 +14,43 @@ public class CategoryPerformanceTest {
     private static long T1StartTime;
     private static long T2StartTime;
 
+
     @Test
     public void testCreateCategories() throws IOException, InterruptedException {
-       T1StartTime = System.currentTimeMillis();
-       T2StartTime = System.currentTimeMillis();
+        FileWriter writer = new FileWriter("Performance.csv",true);
+        writer.write("Create Category\n");
 
-       String validID = "/categories";
-       String title = "TitleTest";
-       String description = "DescriptionTest";
+        T1StartTime = System.currentTimeMillis();
+        T2StartTime = System.currentTimeMillis();
 
-       JSONObject json = new JSONObject();
-       json.put("title", title);
-       json.put("description", description);
-       TodoInstance.post(validID,json.toString());
-        Thread.sleep(500);
+        String validID = "/categories";
+        String title = "TitleTest";
+        String description = "DescriptionTest";
 
-       long T2 = System.currentTimeMillis() - T2StartTime - 500;
-       System.out.println("T2 of Create Category is: " + T2);
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        json.put("description", description);
+        TodoInstance.post(validID,json.toString());
+         Thread.sleep(500);
 
-       JSONObject response = TodoInstance.send("GET", "/categories?title=" + title);
-       assertEquals(title, response.getJSONArray("categories").getJSONObject(0).getString("title"));
+        long T2 = System.currentTimeMillis() - T2StartTime - 500;
 
-       long T1 = System.currentTimeMillis() - T1StartTime - 500;
+        JSONObject response = TodoInstance.send("GET", "/categories?title=" + title);
+        assertEquals(title, response.getJSONArray("categories").getJSONObject(0).getString("title"));
+
+        long T1 = System.currentTimeMillis() - T1StartTime - 500;
+        System.out.println("T2 of Create Category is: " + T2);
         System.out.println("T1 of Create Category is: " + T1);
+
+        writer.write("T2," + T2 + "\n");
+        writer.write("T1," + T1 + "\n");
+        writer.close();
     }
 
     @Test
     public void testChangeCategories() throws IOException, InterruptedException {
+        FileWriter writer = new FileWriter("Performance.csv",true);
+        writer.write("Change Category\n");
         T1StartTime = System.currentTimeMillis();
 
         String title = "TitleTest";
@@ -57,17 +68,24 @@ public class CategoryPerformanceTest {
         Thread.sleep(500);
 
         long T2 = System.currentTimeMillis() - T2StartTime - 500;
-        System.out.println("T2 of Change Category is: " + T2);
 
         JSONObject response = TodoInstance.send("GET", "/categories/"  + id);
         assertEquals("DESCRIPTION",response.getJSONArray("categories").getJSONObject(0).get("description"));
 
         long T1 = System.currentTimeMillis() - T1StartTime - 500;
+        System.out.println("T2 of Change Category is: " + T2);
         System.out.println("T1 of Change Category is: " + T1);
+
+        writer.write("T2," + T2 + "\n");
+        writer.write("T1," + T1 + "\n");
+        writer.close();
     }
 
     @Test
     public void testDeleteCategories() throws IOException, InterruptedException {
+        FileWriter writer = new FileWriter("Performance.csv",true);
+        writer.write("Delete Category\n");
+
         T1StartTime = System.currentTimeMillis();
 
         String title = "TitleTest";
@@ -80,12 +98,16 @@ public class CategoryPerformanceTest {
         Thread.sleep(500);
 
         long T2 = System.currentTimeMillis() - T2StartTime - 500;
-        System.out.println("T2 of Delete Category is: " + T2);
 
         TodoInstance.send("DELETE",valid_id);
         assertEquals(TodoInstance.getStatusCode(valid_id), TodoInstance.SC_NOT_FOUND);
 
         long T1 = System.currentTimeMillis() - T1StartTime - 500;
+        System.out.println("T2 of Delete Category is: " + T2);
         System.out.println("T1 of Delete Category is: " + T1);
+
+        writer.write("T2," + T2 + "\n");
+        writer.write("T1," + T1 + "\n\n");
+        writer.close();
     }
 }
