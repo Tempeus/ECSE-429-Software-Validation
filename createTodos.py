@@ -4,7 +4,9 @@ import sys
 
 URL = "http://localhost:4567"
 
-lenTodos = 1000
+val = input("Enter your value: ") 
+
+lenTodos = int(val)
 
 print("==========================TODOS=============================")
 

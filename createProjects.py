@@ -3,8 +3,9 @@ import random
 import sys
 
 URL = "http://localhost:4567"
+val = input("Enter your value: ") 
 
-lenProject = 500
+lenProject = int(val)
 
 # Some TODOS
 print("==========================PROJECTS=============================")             

@@ -4,7 +4,9 @@ import sys
 
 URL = "http://localhost:4567"
 
-lenCategories = 500
+val = input("Enter your value: ") 
+
+lenCategories = int(val)
 
 # Some TODOS
 print("==========================CATEGORIES=============================")
