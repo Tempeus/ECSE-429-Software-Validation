@@ -2,18 +2,21 @@ package ecse429.group11.performance;
 
 import ecse429.group11.restAPI.TodoInstance;
 import org.json.JSONObject;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TodosPerformanceTest {
     private static long T1StartTime;
     private static long T2StartTime;
 
     @Test
-    public void testCreateTodos() throws IOException, InterruptedException {
+    public void AtestCreateTodos() throws IOException, InterruptedException {
         FileWriter writer = new FileWriter("Performance.csv",true);
         writer.write("Create Todos\n");
 
@@ -45,7 +48,7 @@ public class TodosPerformanceTest {
     }
 
     @Test
-    public void testChangeTodos() throws IOException, InterruptedException {
+    public void BtestChangeTodos() throws IOException, InterruptedException {
         FileWriter writer = new FileWriter("Performance.csv",true);
         writer.write("Change Todos\n");
 
@@ -80,7 +83,7 @@ public class TodosPerformanceTest {
     }
 
     @Test
-    public void testDeleteTodos() throws IOException, InterruptedException {
+    public void CtestDeleteTodos() throws IOException, InterruptedException {
         FileWriter writer = new FileWriter("Performance.csv",true);
         writer.write("Delete Todos\n");
 

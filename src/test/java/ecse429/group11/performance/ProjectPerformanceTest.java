@@ -2,19 +2,22 @@ package ecse429.group11.performance;
 
 import ecse429.group11.restAPI.TodoInstance;
 import org.json.JSONObject;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ProjectPerformanceTest {
 
     private static long T1StartTime;
     private static long T2StartTime;
 
     @Test
-    public void testCreateProjects() throws IOException, InterruptedException {
+    public void AtestCreateProjects() throws IOException, InterruptedException {
         FileWriter writer = new FileWriter("Performance.csv",true);
         writer.write("Create Projects\n");
 
@@ -46,7 +49,7 @@ public class ProjectPerformanceTest {
     }
 
     @Test
-    public void testChangeProjects() throws IOException, InterruptedException {
+    public void BtestChangeProjects() throws IOException, InterruptedException {
         FileWriter writer = new FileWriter("Performance.csv",true);
         writer.write("Change Projects\n");
 
@@ -81,7 +84,7 @@ public class ProjectPerformanceTest {
     }
 
     @Test
-    public void testDeleteProjects() throws IOException, InterruptedException {
+    public void CtestDeleteProjects() throws IOException, InterruptedException {
         FileWriter writer = new FileWriter("Performance.csv",true);
         writer.write("Delete Projects\n");
 

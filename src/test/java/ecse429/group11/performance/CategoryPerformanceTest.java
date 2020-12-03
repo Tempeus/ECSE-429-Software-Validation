@@ -2,13 +2,16 @@ package ecse429.group11.performance;
 
 import ecse429.group11.restAPI.TodoInstance;
 import org.json.JSONObject;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CategoryPerformanceTest {
 
     private static long T1StartTime;
@@ -16,7 +19,7 @@ public class CategoryPerformanceTest {
 
 
     @Test
-    public void testCreateCategories() throws IOException, InterruptedException {
+    public void AtestCreateCategories() throws IOException, InterruptedException {
         FileWriter writer = new FileWriter("Performance.csv",true);
         writer.write("Create Category\n");
 
@@ -48,7 +51,7 @@ public class CategoryPerformanceTest {
     }
 
     @Test
-    public void testChangeCategories() throws IOException, InterruptedException {
+    public void BtestChangeCategories() throws IOException, InterruptedException {
         FileWriter writer = new FileWriter("Performance.csv",true);
         writer.write("Change Category\n");
         T1StartTime = System.currentTimeMillis();
@@ -82,7 +85,7 @@ public class CategoryPerformanceTest {
     }
 
     @Test
-    public void testDeleteCategories() throws IOException, InterruptedException {
+    public void CtestDeleteCategories() throws IOException, InterruptedException {
         FileWriter writer = new FileWriter("Performance.csv",true);
         writer.write("Delete Category\n");
 
