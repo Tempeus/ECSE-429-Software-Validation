@@ -1,5 +1,6 @@
 import requests
 import random
+import sys
 
 URL = "http://localhost:4567"
 
@@ -24,20 +25,3 @@ for i in range(lenProject):
     r = requests.post(url=URL + "/projects", json=projectData)
     print(r.json())
 
-# print("==========================CREATING RELATIONSHIP BETWEEN TODOS CATEGORIES AND PROJECTS=============================")
-
-# for i in range(len(someProjects)):
-#     for j in range(random.randint(0, len(someCategories))):
-#         categoryData = {"id": str(random.randint(2, len(someCategories)))}
-#         r = requests.post(url=URL + "/projects/" + str(i+1) +
-#                           "/categories", json=categoryData)
-
-# for i in range(len(someProjects)):
-#     for j in range(random.randint(0, random.randint(0, len(someTodos)))):
-#         todosData = {"id": str(random.randint(2, len(someTodos)))}
-#         r = requests.post(url=URL + "/projects/" +
-#                           str(i+1) + "/tasks", json=todosData)
-
-# print("==============NEW PROJECTS=============")
-# r = requests.get(url=URL + "/projects")
-# print(r.json())
